@@ -1,9 +1,5 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Welcome to {{ title }}</title>
-  </head>
-  <body>
-    <h1>{{ title }} is now Nunjuctified!</h1>
-  </body>
-</html>
+{% extends "layout.html" %}
+
+{% block body %}
+{{ title }} is now Nunjuctified!
+{% endblock %}
