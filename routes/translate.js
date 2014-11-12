@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index.html', { title: 'Lunch Translator' });
+  res.render('translate.html', { title: 'Lunch Translater API' });
 });
 
 module.exports = router;
