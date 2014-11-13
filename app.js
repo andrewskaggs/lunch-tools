@@ -6,11 +6,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var homeRoutes = require('./routes/index');
-var lunchRoutes = require('./routes/lunch');
-var translationRoutes = require('./routes/translation');
-var translateRoutes = require('./routes/translate');
-
 var app = express();
 
 // view engine setup
@@ -27,6 +22,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// routing setup
+var homeRoutes = require('./routes/index');
+var lunchRoutes = require('./routes/lunch');
+var translationRoutes = require('./routes/translation');
+var translateRoutes = require('./routes/translate');
 app.use('/', homeRoutes);
 app.use('/lunch', lunchRoutes);
 app.use('/translation', translationRoutes);

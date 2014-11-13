@@ -1,6 +1,7 @@
-var __ = require('underscore');
-var express = require('express');
-var router = express.Router();
+var express = require('express')
+  , router = express.Router()
+  , __ = require('underscore')
+  ;
 
 var Lunch = function(date, menu) {
   this.date = date;
@@ -20,7 +21,6 @@ var lunches = [
   new Lunch("20141114", "Gryos w/ tzatziki, lettuce, tomato; Creamed Spinach w/ Feta; Oregano Roasted Potatoes"),
 ];
 
-/* GET home page. */
 router.get('/', function(req, res) {
   res.send(lunches);
 });
