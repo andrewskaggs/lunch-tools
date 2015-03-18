@@ -1,6 +1,5 @@
 var express = require('express')
   , router = express.Router()
-  , __ = require('underscore')
   ;
 
 var Translation = function(target, mode, replacement) {
@@ -9,19 +8,20 @@ var Translation = function(target, mode, replacement) {
   this.replacement = replacement;
 };
 
-var translations = [
-  new Translation("mushroom", "simple", "god-damned mushroom"),
-  new Translation("pirogue", "simple", "hot pocket"),
-  new Translation("stew", "simple", "meat slop"),
-];
-
 router.get('/', function(req, res) {
-  res.send(translations);
+  var db = req.db;
+  var collection = db.get('translations');
+  collection.find({},{}, function(e, t) {
+    res.send(t);
+  });
 });
 
 router.get('/:target', function(req, res) {
-  var translation = __.findWhere(translations, { target: req.params.target });
-  res.send(translation);
+  var db = req.db;
+  var collection = db.get('translations');
+  collection.find({ target: req.params.target},{}, function(e, t) {
+    res.send(t);
+  });
 });
 
 router.post('/', function(req, res) {
