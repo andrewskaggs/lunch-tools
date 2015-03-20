@@ -2,46 +2,64 @@ var express = require('express')
   , router = express.Router()
   ;
 
-var Translation = function(target, mode, replacement) {
-  this.target = target;
-  this.mode = mode;
-  this.replacement = replacement;
-};
-
 router.get('/', function(req, res) {
-  var db = req.db;
-  var collection = db.get('translations');
-  collection.find({},{}, function(e, t) {
-    res.send(t);
+  var collection = req.db.get('translations');
+  collection.find({},{}, function(err, result) {
+    res.send(result);
   });
 });
 
-router.get('/:target', function(req, res) {
-  var db = req.db;
-  var collection = db.get('translations');
-  collection.find({ target: req.params.target},{}, function(e, t) {
-    res.send(t);
+router.get('/:id', function(req, res) {
+  var collection = req.db.get('translations');
+  collection.find({ _id: req.params.id},{}, function(err, result) {
+    res.send(result);
+  });
+});
+
+router.get('/target/:target', function(req, res) {
+  var collection = req.db.get('translations');
+  collection.find({ target: req.params.target},{}, function(err, result) {
+    res.send(err,result);
   });
 });
 
 router.post('/', function(req, res) {
-  var translation = __.findWhere(translations, { target: req.body.target});
-  if (typeof translation === "undefined") {
-    translation = new Translation(req.body.target, req.body.mode, req.body.replacement);
-    translations.push(translation);
-  } else {
-    translation.mode = req.body.mode;
-    translation.replacement = req.body.replacement;
-  }
-  res.status = 200;
-  res.send();
+  req.db.get('translations').insert(req.body,
+    function(err, result) {
+      if (err === null) {
+        res.status = 200;
+        res.send();
+      } else {
+        res.status = 500;
+        res.send(err);
+      }
+    });
 });
 
-router.delete('/:target', function(req, res) {
-  translations = __.reject(translations, { target: req.params.target });
-  res.status = 200;
-  res.send();
+router.put('/', function(req, res) {
+  req.db.get('translations').updateById(req.body._id, req.body,
+    function(err, result) {
+      if (err === null) {
+        res.status = 200;
+        res.send();
+      } else {
+        res.status = 500;
+        res.send(err);
+      }
+    });
 });
 
+router.delete('/:id', function(req, res) {
+  req.db.get('translations').removeById(req.params.id,
+    function(err, result) {
+      if (err === null) {
+        res.status = 200;
+        res.send();
+      } else {
+        res.status = 500;
+        res.send(err);
+      }
+    });
+});
 
 module.exports = router;
