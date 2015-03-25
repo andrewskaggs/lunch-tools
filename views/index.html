@@ -1,5 +1,37 @@
-{% extends "layout.html" %}
+{% raw %}
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+</head>
 
-{% block body %}
-{{ title }} is now Nunjuctified!
-{% endblock %}
+<body ng-app="myApp" ng-controller="translationController">
+  <div class="container">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Search String</th>
+          <th>Mode</th>
+          <th>Replacement String</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="translation in translations">
+          <td>{{ translation.target }}</td>
+          <td>{{ translation.mode }}</td>
+          <td>{{ translation.replacement }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+
+<script type="text/javascript">
+angular.module('myApp', []).controller('translationController', function($scope,$http) {
+  $http.get("translation").success(function(response) { $scope.translations = response; });
+});
+</script>
+
+</html>
+{% endraw %}
