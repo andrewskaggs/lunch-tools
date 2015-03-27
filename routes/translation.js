@@ -24,6 +24,9 @@ router.get('/target/:target', function(req, res) {
 });
 
 router.post('/', function(req, res) {
+  if (req.body._id)
+    req.body._id = null;
+
   req.db.get('translations').insert(req.body,
     function(err, result) {
       if (err === null) {
@@ -37,6 +40,11 @@ router.post('/', function(req, res) {
 });
 
 router.put('/', function(req, res) {
+  if (! req.body._id || 0 === reg.body._id.length) {
+    res.status = 400;
+    res.send(err);
+  }
+
   req.db.get('translations').updateById(req.body._id, req.body,
     function(err, result) {
       if (err === null) {
