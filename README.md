@@ -1,4 +1,4 @@
-#LunchTranslator
+#lunch-translator
 
 This is a MEAN stack application that manages lunch menu translations
 
