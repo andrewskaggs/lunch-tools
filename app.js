@@ -29,12 +29,12 @@ app.use(function(req,res,next){req.db = db;next();});
 
 // routing setup
 var homeRoutes = require('./routes/index');
-var lunchRoutes = require('./routes/lunch');
-var translationRoutes = require('./routes/translation');
+var lunchRoutes = require('./routes/lunches');
+var translationRoutes = require('./routes/translations');
 var translateRoutes = require('./routes/translate');
 app.use('/', homeRoutes);
-app.use('/lunch', lunchRoutes);
-app.use('/translation', translationRoutes);
+app.use('/lunches', lunchRoutes);
+app.use('/translations', translationRoutes);
 app.use('/translate', translateRoutes);
 
 // catch 404 and forward to error handler

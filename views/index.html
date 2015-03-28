@@ -34,6 +34,7 @@
     </div>
 
     <div class="row">
+      all search strings are case-insensitive regular expressions<br/><br/>
       <a href="#" role="button" class="btn btn-success" ng-click="edit();"><i class="fa fa-plus-circle fa-fw"></i>New Translation</a>
     </div>
 
@@ -63,7 +64,7 @@ angular.module('myApp', []).controller('translationController', function($scope,
 
   $scope.edit = function(id) {
       if (id) {
-        $http.get('translation/' + id).success(
+        $http.get('translations/' + id).success(
           function(response) {
             $scope._id = response[0]._id;
             $scope.target = response[0].target;
@@ -80,15 +81,20 @@ angular.module('myApp', []).controller('translationController', function($scope,
 
   $scope.save = function() {
     var verb;
-    if ($scope._id)
+    var url = 'translations';
+
+    if ($scope._id) {
       verb = 'PUT';
-    else
+      url = url + '/' + $scope._id
+    }
+    else {
       verb = 'POST';
+    }
+
     $http({
-      url: 'translation',
+      url: url,
       method: verb,
       data: {
-        _id: $scope._id,
         target: $scope.target,
         replacement: $scope.replacement
        }
@@ -107,7 +113,7 @@ angular.module('myApp', []).controller('translationController', function($scope,
   $scope.delete = function(id) {
     if (confirm('Are you sure?')) {
       $scope.isEditing = false;
-      $http.delete('translation/' + id).success(
+      $http.delete('translations/' + id).success(
         function(data, status, headers, config) {
           $scope.refresh();
         });
@@ -115,7 +121,7 @@ angular.module('myApp', []).controller('translationController', function($scope,
   };
 
   $scope.refresh = function() {
-    $http.get('translation').success(
+    $http.get('translations').success(
       function(data, status, headers, config) {
         $scope.translations = data;
       });
