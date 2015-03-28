@@ -4,11 +4,11 @@ This is a MEAN stack application that manages lunch menu translations
 
 ###API
 Express app exposing a Restful API backed by MongoDB. Endpoints:
-- /translations - GET, POST (target, replacement)
-- /translations/{id} -  GET, PUT (target, replacement), DELETE
-- /translate - POST (lunch)
-- /lunches - GET, POST (date, menu)
-- /lunches/{id} - GET, PUT (date, menu), DELETE
+* /translations - GET, POST (target, replacement)
+* /translations/{id} -  GET, PUT (target, replacement), DELETE
+* /translate - POST (lunch)
+* /lunches - GET, POST (date, menu)
+* /lunches/{id} - GET, PUT (date, menu), DELETE
 
 ###Web Interface
 AngularJS app at / to perform CRUD operations. Uses the API.
