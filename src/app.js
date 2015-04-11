@@ -68,4 +68,17 @@ app.use(function(err, req, res, next) {
     });
 });
 
+//browswer-sync for development mode
+if (app.get('env') == 'development') {
+  var browserSync = require('browser-sync');
+  var bs = browserSync(
+    {
+      proxy: "localhost:3000",
+      files: ["public/**", "views/**"],
+      reloadDelay: 250,
+      logConnections: true
+    });
+  app.use(require('connect-browser-sync')(bs));
+}
+
 module.exports = app;
