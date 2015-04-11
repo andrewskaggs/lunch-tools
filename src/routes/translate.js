@@ -8,8 +8,7 @@ router.get('/', function(req, res) {
 
 router.post('/', function(req, res) {
   if (req.body === null || req.body.lunch === null) {
-    res.status = 400;
-    res.send( { message: '\'lunch\' missing' } );
+    res.status(400).send( { message: '\'lunch\' missing' } );
   } else {
     var lunch = req.body.lunch;
     req.db.get('translations').find({},{},
@@ -18,7 +17,6 @@ router.post('/', function(req, res) {
           function(value, index, array1){
             lunch = lunch.replace(new RegExp(value.target, 'i'), value.replacement);
           });
-        res.status = 200;
         res.send(lunch);
       });
   }

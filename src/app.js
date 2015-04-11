@@ -9,7 +9,11 @@ var bodyParser = require('body-parser');
 // mongo stuff
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/LunchTranslator');
+var mongoConnectionString = 'localhost:27017/LunchTranslator';
+if (process.env.LUNCH_TRANSLATOR_MONGO) {
+    mongoConnectionString = process.env.LUNCH_TRANSLATOR_MONGO;
+}
+var db = monk(mongoConnectionString);
 
 var app = express();
 

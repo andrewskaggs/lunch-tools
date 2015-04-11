@@ -9,8 +9,7 @@ router.get('/', function(req, res) {
       if (err === null) {
         res.send(result);
       } else {
-        res.status = 500;
-        res.send(err);
+        res.status(500).send(err);
       }
     });
 });
@@ -23,36 +22,30 @@ router.get('/:id', function(req, res) {
         res.send(result);
       }
       else {
-        res.status = 500;
-        res.send(err);
+        res.status(500).send(err);
       }
     });
 });
 
 router.post('/', function(req, res) {
   if (req.body._id) {
-    res.status = 400;
-    res.send( { message: '\'_id\' field is not allowed. Use PUT for updates' } );
+    res.status(400).send( { message: '\'_id\' field is not allowed. Use PUT for updates' } );
   }
 
   if (!req.body.target) {
-    res.status = 400;
-    res.send( { message: 'target field is required' } );
+    res.status(400).send( { message: 'target field is required' } );
   }
 
   if (!req.body.replacement) {
-    res.status = 400;
-    res.send( { message: 'replacement field is required' } );
+    res.status(400).send( { message: 'replacement field is required' } );
   }
 
   req.db.get('translations').insert(req.body,
     function(err, result) {
       if (err === null) {
-        res.status = 200;
         res.send();
       } else {
-        res.status = 500;
-        res.send(err);
+        res.status(500).send(err);
       }
     });
 });
@@ -63,8 +56,7 @@ router.put('/:id', function(req, res) {
       if (err === null) {
         update(result, req, res);
       } else {
-        res.status = 404;
-        res.send();
+        res.status(404).send();
       }
     });
 });
@@ -79,11 +71,9 @@ function update(translation, req, res) {
   req.db.get('translations').updateById(translation._id, translation,
     function(err, result) {
       if (err === null) {
-        res.status = 200;
         res.send();
       } else {
-        res.status = 500;
-        res.send(err);
+        res.status(500).send(err);
       }
     });
 };
@@ -92,11 +82,9 @@ router.delete('/:id', function(req, res) {
   req.db.get('translations').removeById(req.params.id,
     function(err, result) {
       if (err === null) {
-        res.status = 200;
         res.send();
       } else {
-        res.status = 500;
-        res.send(err);
+        res.status(500).send(err);
       }
     });
 });
