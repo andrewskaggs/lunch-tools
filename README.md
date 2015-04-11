@@ -28,5 +28,5 @@ mongoimport --db LunchTranslator --collection translations --file data/translati
 ```
 cd src
 npm install
-npm run debug
+npm run dev
 ```
