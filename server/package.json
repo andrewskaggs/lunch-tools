@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www",
-    "dev": "nodemon --ignore dist/ ./bin/www"
+    "dev": "nodemon --ignore client/ ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.8.1",
@@ -19,8 +19,6 @@
     "underscore": "^1.7.0"
   },
   "devDependencies": {
-    "browser-sync": "^2.5.3",
-    "connect-browser-sync": "^2.0.1",
     "nodemon": "^1.3.7"
   }
 }

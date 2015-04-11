@@ -29,6 +29,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'client')));
 app.use(function(req,res,next){req.db = db;next();});
 
 // routing setup
@@ -69,20 +70,5 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
-//browswer-sync for development mode
-/*
-if (app.get('env') == 'development') {
-  var browserSync = require('browser-sync');
-  var bs = browserSync(
-    {
-      proxy: "localhost:3000",
-      files: ["public/**", "views/**"],
-      reloadDelay: 250,
-      logConnections: true
-    });
-  app.use(require('connect-browser-sync')(bs));
-}
-*/
 
 module.exports = app;

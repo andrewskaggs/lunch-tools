@@ -26,16 +26,25 @@ mongoimport --db LunchTranslator --collection lunches --file data/lunches.json
 mongoimport --db LunchTranslator --collection translations --file data/translations.json
 ```
 
-###App Startup
-
+###Startup (Development w/ browser-sync and nodemon)
+This is easiest with two terminals.
 ```
-cd src
+cd server
+npm install
+npm run dev
+```
+```
+cd client
+npm install
+gulp
+```
+
+###Startup (Prod)
+```
+cd client
+npm install
+gulp deploy
+cd ..\server
 npm install
 npm start
-```
-
-###Development Tools
-nodemon and browser-sync are integrated for development usage
-```
-npm run dev
 ```
