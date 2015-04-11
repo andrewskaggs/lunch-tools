@@ -6,7 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-// mongo stuff
+// mongo initialization
 var mongo = require('mongodb');
 var monk = require('monk');
 var mongoConnectionString = 'localhost:27017/LunchTranslator';
@@ -32,11 +32,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req,res,next){req.db = db;next();});
 
 // routing setup
-var homeRoutes = require('./routes/index');
 var lunchRoutes = require('./routes/lunches');
 var translationRoutes = require('./routes/translations');
 var translateRoutes = require('./routes/translate');
-app.use('/', homeRoutes);
 app.use('/lunches', lunchRoutes);
 app.use('/translations', translationRoutes);
 app.use('/translate', translateRoutes);
@@ -50,7 +48,7 @@ app.use(function(req, res, next) {
 
 // error handlers
 
-// development error handler
+// development error handler includes stack trace
 // will print stacktrace
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
@@ -73,6 +71,7 @@ app.use(function(err, req, res, next) {
 });
 
 //browswer-sync for development mode
+/*
 if (app.get('env') == 'development') {
   var browserSync = require('browser-sync');
   var bs = browserSync(
@@ -84,5 +83,6 @@ if (app.get('env') == 'development') {
     });
   app.use(require('connect-browser-sync')(bs));
 }
+*/
 
 module.exports = app;

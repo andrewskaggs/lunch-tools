@@ -1,0 +1,10 @@
+{
+  "name": "lunch-translator-client",
+  "version": "0.0.0",
+  "dependencies": {
+    "gulp": "^3.8.11"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.5.2"
+  }
+}
