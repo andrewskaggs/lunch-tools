@@ -13,15 +13,20 @@ Express app exposing a Restful API backed by MongoDB. Endpoints:
 ###Web Interface
 AngularJS app at / to perform CRUD operations. Uses the API.
 
-###Database Startup
-
-     mongod --dbpath mongo
-
+###Local Database Startup
+```
+mongod --dbpath mongo
+```
 These scripts only need to be run once to populate the database:
+```
+mongoimport --db LunchTranslator --collection lunches --file data/lunches.json
+mongoimport --db LunchTranslator --collection translations --file data/translations.json
+```
 
-     mongoimport --db LunchTranslator --collection lunches --file data/lunches.json
-     mongoimport --db LunchTranslator --collection translations --file data/translations.json
+###Local App Startup
 
-###App Startup
-
-     npm start
+```
+cd src
+npm install
+npm run debug
+```
