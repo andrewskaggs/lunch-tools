@@ -1,4 +1,6 @@
-var nunjucks = require('nunjucks')
+#!/usr/bin/env node
+var debug = require('debug')('LunchTranslator');
+var nunjucks = require('nunjucks');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -28,20 +30,31 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'client')));
 app.use(function(req,res,next){req.db = db;next();});
 
-// routing setup
+// routing setup  - iisnode feeds in the whole path instead of 
+// the application directory relative path so windows deployments
+// need to set the LUNCH_TRANSLATOR_BASE_PATH environment variable
+var routeBase = '/';
+if (process.env.LUNCH_TRANSLATOR_BASE_PATH) {
+	routeBase = process.env.LUNCH_TRANSLATOR_BASE_PATH;
+}
+
+// route static files
+app.use(routeBase, express.static(path.join(__dirname, 'public')));
+app.use(routeBase, express.static(path.join(__dirname, 'client')));
+
+//include the controllers and route them
 var lunchRoutes = require('./routes/lunches');
 var translationRoutes = require('./routes/translations');
 var translateRoutes = require('./routes/translate');
-app.use('/lunches', lunchRoutes);
-app.use('/translations', translationRoutes);
-app.use('/translate', translateRoutes);
+app.use(routeBase + 'lunches', lunchRoutes);
+app.use(routeBase + 'translations', translationRoutes);
+app.use(routeBase + 'translate', translateRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+	console.log(req);
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
@@ -71,4 +84,8 @@ app.use(function(err, req, res, next) {
     });
 });
 
-module.exports = app;
+// finally start it up
+app.set('port', process.env.PORT || 3000);
+var server = app.listen(app.get('port'), function() {
+  debug('Express server listening on port ' + server.address().port);
+});

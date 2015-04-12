@@ -33,3 +33,4 @@ mongo
 #directories used in gulp build process for client
 client/build
 server/client
+server/iisnode
