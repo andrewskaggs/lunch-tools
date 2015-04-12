@@ -17,7 +17,7 @@ router.post('/', function(req, res) {
           function(value, index, array1){
             lunch = lunch.replace(new RegExp(value.target, 'i'), value.replacement);
           });
-        res.send(lunch);
+        res.json({ result: lunch });
       });
   }
 });
