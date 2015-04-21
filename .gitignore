@@ -27,10 +27,10 @@ build/Release
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git-
 node_modules
 
-#mongo
+#mongo data dir
 mongo
 
-#directories used in gulp build process for client
+#build outputs
 client/build
 server/client
 server/iisnode

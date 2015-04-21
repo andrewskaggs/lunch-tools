@@ -20,9 +20,9 @@ MongoDB connection that defaults to a local instance named "LunchTranslator" wit
 mongod --dbpath mongo
 ```
 
-To use an external database set the environment variable "LUNCH_TRANSLATOR_MONGO" in the format "USERNAME:PASSWORD@localhost:27017/LunchTranslator"
+To use an external database set the environment variable "LUNCH_TRANSLATOR_MONGO" in the format "USERNAME:PASSWORD@localhost:27017/LunchTranslator".
 
-These scripts should be run once to seed the database:
+These scripts can be run once to seed the database:
 
 ```
 mongoimport --db LunchTranslator --collection lunches --file data/lunches.json
