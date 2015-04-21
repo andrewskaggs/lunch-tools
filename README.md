@@ -17,6 +17,7 @@ AngularJS app at / to perform management operations. API consumer.
 MongoDB connection that defaults to a local instance named "LunchTranslator" without a password. Start it like this:
 
 ```
+mkdir mongo
 mongod --dbpath mongo
 ```
 
