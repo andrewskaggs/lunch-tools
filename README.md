@@ -2,6 +2,9 @@
 
 MEAN stack application that stores and performs menu translations. Born from the loving nicknames we give our daily catered lunches at [Kabbage](https://github.com/kabbageinc) and a desire to learn a new application stack.
 
+[![Code Climate](https://codeclimate.com/github/andrewskaggs/lunch-translator/badges/gpa.svg)](https://codeclimate.com/github/andrewskaggs/lunch-translator)
+[![Test Coverage](https://codeclimate.com/github/andrewskaggs/lunch-translator/badges/coverage.svg)](https://codeclimate.com/github/andrewskaggs/lunch-translator)
+
 ###API
 Restful API provided by Express application. Endpoints:
 * /translations - GET, POST (target, replacement)
