@@ -16,21 +16,16 @@
     </div>
 
     <div class="row">
-      <div class="pull-left">
-      <em>all search strings are case-insensitive regular expressions</em>
-      </div>
-      <div class="pull-right">
-        <a href="#" role="button" class="btn btn-success" data-toggle="modal" data-target="#editModal" ng-click="edit();"><i class="fa fa-plus-circle fa-fw"></i>New Translation</a>
-      </div>
-    </div>
-
-    <div class="row">
       <table class="table table-striped">
         <thead>
           <tr>
             <th>Search String</th>
             <th>Replacement String</th>
-            <th></th>
+            <th>
+              <span class="pull-right">
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editModal" ng-click="edit();"><i class="fa fa-plus-circle fa-fw"></i>New Translation</button>
+              </span>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -39,8 +34,8 @@
             <td>{{ translation.replacement }}</td>
             <td>
               <span class="pull-right">
-                <a href="#" role="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" ng-click="edit(translation._id)"><i class="fa fa-pencil fa-fw"></i>Edit</a>
-                <a href="#" role="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" ng-click="edit(translation._id)"><i class="fa fa-remove fa-fw"></i>Delete</a>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" ng-click="edit(translation._id)"><i class="fa fa-pencil fa-fw"></i>Edit</button>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" ng-click="edit(translation._id)"><i class="fa fa-remove fa-fw"></i>Delete</button>
               </span>
             </td>
           </tr>
@@ -52,25 +47,26 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="editModalLabel">Edit Translation</h4>
           </div>
           <div class="modal-body">
+            <div class="text-danger bg-danger" ng-if="error"><i class="fa fa-warning fa-fw"></i>{{ error }}</div>
             <form>
               <input type="hidden" ng-model="_id"/>
               <div class="form-group">
                 <label for="searchInput">Search String:</label>
-                <input type="text" ng-model="target" id="searchInput" placeholder="mushrooms" class="form-control"/>
+                <input type="text" ng-model="target" id="searchInput" class="form-control"/>
+                <em>search string is a case-insensitive javascript regular expression</em>
               </div>
               <div class="form-group">
                 <label for="replacementInput">Replacement String:</label>
-                <input type="text" ng-model="replacement" id="replacementInput" placeholder="fungus" class="form-control"/>
+                <input type="text" ng-model="replacement" id="replacementInput" class="form-control"/>
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-ban fa-fw"></i>Cancel</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="save();"><i class="fa fa-save fa-fw"></i>Save</button>
+            <button type="button" class="btn btn-primary" ng-click="save();"><i class="fa fa-save fa-fw"></i>Save</button>
           </div>
         </div>
       </div>
@@ -80,15 +76,15 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="deleteModalLabel">Delete Translation</h4>
           </div>
+          <div class="text-danger bg-danger" ng-if="error"><i class="fa fa-warning fa-fw"></i>{{ error }}</div>
           <div class="modal-body">
-            Are you sure you want to delete the translation for "{{ target }}" ?
+            Are you sure you want to delete the translation "{{ target }}" => "{{ replacement }}" ?
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-ban fa-fw"></i>Cancel</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="delete(_id);"><i class="fa fa-remove fa-fw"></i>Delete</a>
+            <button type="button" class="btn btn-danger" ng-click="delete(_id);"><i class="fa fa-remove fa-fw"></i>Delete</a>
           </div>
         </div>
       </div>
@@ -111,11 +107,13 @@ angular.module('myApp', []).controller('translationController', function($scope,
             $scope._id = response[0]._id;
             $scope.target = response[0].target;
             $scope.replacement = response[0].replacement;
+            $scope.error = null;
           });
       } else {
         $scope._id = null;
         $scope.target = '';
         $scope.replacement = '';
+        $scope.error = null;
       }
   };
 
@@ -138,17 +136,22 @@ angular.module('myApp', []).controller('translationController', function($scope,
         target: $scope.target,
         replacement: $scope.replacement
        }
-    }).success(
-      function(data, status, headers, config){
-        $scope.refresh();
-      }
-    );
+    }).success(function(data, status, headers, config) {
+      $('#editModal').modal('hide');
+      $scope.refresh();
+    }).error(function(data, status, headers, config) {
+      $scope.handleAjaxError(data, status, headers, config);
+    });
   };
 
   $scope.delete = function(id) {
-    $http.delete('translations/' + id).success(
-      function(data, status, headers, config) {
+    $http.delete('translations/' + id)
+      .success(function(data, status, headers, config) {
+        $('#deleteModal').modal('hide');
         $scope.refresh();
+      })
+      .error(function(data, status, headers, config) {
+        $scope.handleAjaxError(data, status, headers, config);
       });
   };
 
@@ -158,6 +161,13 @@ angular.module('myApp', []).controller('translationController', function($scope,
         $scope.translations = data;
       });
   };
+
+  $scope.handleAjaxError = function(data, status, headers, config) {
+      $scope.error = 'HTTP ' + status.toString();
+      if (data) {
+        $scope.error += ' ' + data.eval().toString();
+      }
+  }
 
   $scope.refresh();
 });
