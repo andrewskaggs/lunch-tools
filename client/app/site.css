@@ -1,0 +1,13 @@
+.footer {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.navbar-brand {
+  padding: 5px;
+}
+
+.navbar-brand img {
+  height: 40px;
+  width: 40px;
+}
