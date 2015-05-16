@@ -25,14 +25,13 @@ nunjucks.configure('views', {
     express: app
 });
 
-app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(function(req,res,next){req.db = db;next();});
 
-// routing setup  - iisnode feeds in the whole path instead of 
+// routing setup  - iisnode feeds in the whole path instead of
 // the application directory relative path so windows deployments
 // need to set the LUNCH_TRANSLATOR_BASE_PATH environment variable
 var routeBase = '/';
