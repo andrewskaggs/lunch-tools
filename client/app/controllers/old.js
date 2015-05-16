@@ -1,5 +1,4 @@
 angular.module('myApp', []).controller('translationController', function($scope,$http) {
-  $scope.isEditing = false;
 
   $scope.edit = function(id) {
       if (id) {
@@ -8,13 +7,13 @@ angular.module('myApp', []).controller('translationController', function($scope,
             $scope._id = response[0]._id;
             $scope.target = response[0].target;
             $scope.replacement = response[0].replacement;
-            $scope.isEditing = true;
+            $scope.error = null;
           });
       } else {
         $scope._id = null;
         $scope.target = '';
         $scope.replacement = '';
-        $scope.isEditing = true;
+        $scope.error = null;
       }
   };
 
@@ -37,26 +36,23 @@ angular.module('myApp', []).controller('translationController', function($scope,
         target: $scope.target,
         replacement: $scope.replacement
        }
-    }).success(
-      function(data, status, headers, config){
-        $scope.isEditing = false;
-        $scope.refresh();
-      }
-    );
-  };
-
-  $scope.cancel = function() {
-    $scope.isEditing = false;
+    }).success(function(data, status, headers, config) {
+      $('#editModal').modal('hide');
+      $scope.refresh();
+    }).error(function(data, status, headers, config) {
+      $scope.handleAjaxError(data, status, headers, config);
+    });
   };
 
   $scope.delete = function(id) {
-    if (confirm('Are you sure?')) {
-      $scope.isEditing = false;
-      $http.delete('translations/' + id).success(
-        function(data, status, headers, config) {
-          $scope.refresh();
-        });
-    }
+    $http.delete('translations/' + id)
+      .success(function(data, status, headers, config) {
+        $('#deleteModal').modal('hide');
+        $scope.refresh();
+      })
+      .error(function(data, status, headers, config) {
+        $scope.handleAjaxError(data, status, headers, config);
+      });
   };
 
   $scope.refresh = function() {
@@ -65,6 +61,13 @@ angular.module('myApp', []).controller('translationController', function($scope,
         $scope.translations = data;
       });
   };
+
+  $scope.handleAjaxError = function(data, status, headers, config) {
+      $scope.error = 'HTTP ' + status.toString();
+      if (data) {
+        $scope.error += ' ' + data.eval().toString();
+      }
+  }
 
   $scope.refresh();
 });
