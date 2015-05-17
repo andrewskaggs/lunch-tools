@@ -4,6 +4,6 @@ var controllers = angular.module('lunchControllers');
 
 controllers.controller('showMeController', [ '$scope',
   function($scope) {
-    $scope.message = "show me stuff";
+    $scope.message = "show me coming soon";
   }
 ]);
