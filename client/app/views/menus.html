@@ -1,4 +1,20 @@
-<div class="container">
-  <div class="row"><h2>Menus</h2></div>
-  <div class="row">{{ message }}</div>
+<div class="row">
+  <h2>Menus</h2>
+</div>
+
+<div class="row">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="menu in menus | orderBy: 'date'">
+        <td>{{ menu.date | date : 'MM/dd/yyyy' }}</td>
+        <td>{{ menu.menu }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
