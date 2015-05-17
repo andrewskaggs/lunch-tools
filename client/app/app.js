@@ -2,7 +2,8 @@
 
 var lunchApp = angular.module('lunchApp', [
   'ngRoute',
-  'lunchControllers'
+  'lunchControllers',
+  'lunchDirectives'
 ]);
 
 lunchApp.config(['$routeProvider', '$locationProvider',
@@ -20,3 +21,4 @@ lunchApp.config(['$routeProvider', '$locationProvider',
 ]);
 
 var controllers = angular.module('lunchControllers', []);
+var directives = angular.module('lunchDirectives', []);
