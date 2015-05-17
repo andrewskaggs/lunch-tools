@@ -11,7 +11,11 @@
 </head>
 
 <body ng-app="lunchApp">
-  <div ng-view></div>
+  <ng-include src="'views/header.html'"/></ng-include>
+  <div class="container">
+    <div ng-view></div>
+    <ng-include src="'views/footer.html'"/></ng-include>
+  </div>
 </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>

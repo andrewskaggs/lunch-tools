@@ -8,7 +8,7 @@ var lunchApp = angular.module('lunchApp', [
 lunchApp.config(['$routeProvider', '$locationProvider',
   function($routeProvider, $locationProvider) {
     $routeProvider
-      .when('/', { redirectTo: '/showme' })
+      .when('', { redirectTo: '/showme' })
       .when('/menus', {templateUrl: 'views/menus.html', controller: 'menusController'})
       .when('/showme', {templateUrl: 'views/showme.html', controller: 'showMeController'})
       .when('/translations', {templateUrl: 'views/translations.html', controller: 'translationsController'});
