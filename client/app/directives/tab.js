@@ -6,7 +6,7 @@ directives.directive('lunchTab', [ '$location',
   function($location) {
     return {
       restrict: 'E',
-      templateUrl: '/views/tab.html',
+      templateUrl: 'views/tab.html',
       scope: {
         name: '@',
         url: '@'
