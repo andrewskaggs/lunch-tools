@@ -9,6 +9,7 @@ router.get('/', function(req, res) {
       if (err === null) {
         res.send(result);
       } else {
+        console.log(err);
         res.status(500).send(err);
       }
     });
@@ -22,6 +23,7 @@ router.get('/:id', function(req, res) {
         res.send(result);
       }
       else {
+        console.log(err);
         res.status(500).send(err);
       }
     });
@@ -45,6 +47,7 @@ router.post('/', function(req, res) {
       if (err === null) {
         res.send();
       } else {
+        console.log(err);
         res.status(500).send(err);
       }
     });
@@ -73,6 +76,7 @@ function update(translation, req, res) {
       if (err === null) {
         res.send();
       } else {
+        console.log(err);
         res.status(500).send(err);
       }
     });
@@ -84,6 +88,7 @@ router.delete('/:id', function(req, res) {
       if (err === null) {
         res.send();
       } else {
+        console.log(err);
         res.status(500).send(err);
       }
     });
