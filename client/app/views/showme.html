@@ -1,2 +1,16 @@
 <div class="row"><h2>Show Me</h2></div>
-<div class="row">{{ message }}</div>
+
+<div class="row">
+  <button type="button" class="btn btn-default" ng-click="previousDay();"><i class="fa fa-chevron-left fa-2x"></i></button>
+  <b>{{ lunch.date | date : 'MM/dd/yyyy' }}</b>
+  <button type="button" class="btn btn-default" ng-click="nextDay();"><i class="fa fa-chevron-right fa-2x"></i></button>
+</div>
+<div class="row">
+  <div ng-if="lunch.menu">
+    <img ng-src="{{ lunch.image }}" class="img-responsive"><br/>
+    {{ lunch.translation }}
+  </div>
+  <div ng-if="! lunch.menu">
+    <h2>No Lunch Found!</h2>
+  </div>
+</div>
