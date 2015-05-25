@@ -34,6 +34,11 @@ mongoimport --db LunchTranslator --collection lunches --file data/lunches.json
 mongoimport --db LunchTranslator --collection translations --file data/translations.json
 ```
 
+###RSS Consumption
+Hit the endpoint `/lunches/update` to consume an RSS feed containing new lunches and add them
+to the database. The feed address must be set in the server environment variable `LUNCH_TRANSLATOR_RSS`.  The lunch date is set by the publication date and the lunch contents is found by looking for a `<p>`  tag.
+
+
 ###Startup (Development Mode w/ browser-sync and nodemon)
 This is easiest with two terminals.
 
@@ -61,5 +66,4 @@ npm start
 ```
 
 ###IIS Deployment
-This is pretty tricky, but I did get it working with IISNODE and included the required web.config file. Be sure to set the LUNCH_TRANSLATOR_BASE_PATH environment variable in the web.config to the IIS application directory.
-(ie hosting at http://localhost/lunch/ would need a value of "/lunch/")
+Windows and node.js is still pretty tricky but I did get it working with [IISNODE](https://github.com/tjanczuk/iisnode) and included the web.config file. I recommend setting all envrionment variables in the web.config due to the way IIS reads them once per boot. Hosting in an application directory instead of the root requires `LUNCH_TRANSLATOR_BASE_PATH` environment variable be set with the application directory (ie hosting at http://localhost/lunch/ would need a value of "/lunch/").

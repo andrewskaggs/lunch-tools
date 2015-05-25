@@ -1,17 +1,27 @@
 <div class="row"><h2>Menus</h2></div>
 
 <div class="row">
+  <div class="text-info bg-info alert" ng-if="info"><i class="fa fa-info-circle fa-lg"></i>{{ info }}</div>
+  <div class="text-danger bg-danger alert" ng-if="error"><i class="fa fa-warning fa-lg"></i>{{ error }}</div>
+</div>
+
+<div class="row">
   <table class="table table-striped">
     <thead>
       <tr>
         <th>Date</th>
         <th>Description</th>
+        <th>
+          <span class="pull-right">
+            <button type="button" class="btn btn-primary" ng-click="updateRSS();" ng-disabled="updating"><i class="fa fa-rss fa-fw"></i>Update Menus</button>
+          </span>
+        </th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="menu in menus | orderBy: 'date'">
         <td>{{ menu.date | date : 'MM/dd/yyyy' }}</td>
-        <td>{{ menu.menu }}</td>
+        <td colspan=2>{{ menu.menu }}</td>
       </tr>
     </tbody>
   </table>

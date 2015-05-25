@@ -15,3 +15,13 @@
 button.navbar-toggle {
   margin: 5px;
 }
+
+.alert {
+  margin: 5px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.alert i {
+  margin-right: 15px;
+}
