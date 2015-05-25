@@ -4,20 +4,28 @@ var controllers = angular.module('lunchControllers');
 
 controllers.controller('translationsController', [ '$scope', '$http',
   function($scope, $http) {
+
+    $scope.info = null;
+    $scope.error = null;
+    $scope.dialogError = null;
+
     $scope.edit = function(id) {
         if (id) {
-          $http.get('translations/' + id).success(
-            function(response) {
+          $http.get('translations/' + id)
+            .success(function(response) {
               $scope._id = response[0]._id;
               $scope.target = response[0].target;
               $scope.replacement = response[0].replacement;
-              $scope.error = null;
+              $scope.dialogError = null;
+            })
+            .error(function(data, status, headers, config) {
+              $scope.handleDialogError(data, status, headers, config);
             });
         } else {
           $scope._id = null;
           $scope.target = '';
           $scope.replacement = '';
-          $scope.error = null;
+          $scope.dialogError = null;
         }
     };
 
@@ -44,7 +52,7 @@ controllers.controller('translationsController', [ '$scope', '$http',
         $('#editModal').modal('hide');
         $scope.refresh();
       }).error(function(data, status, headers, config) {
-        $scope.handleAjaxError(data, status, headers, config);
+        $scope.handleDialogError(data, status, headers, config);
       });
     };
 
@@ -55,7 +63,7 @@ controllers.controller('translationsController', [ '$scope', '$http',
           $scope.refresh();
         })
         .error(function(data, status, headers, config) {
-          $scope.handleAjaxError(data, status, headers, config);
+          $scope.handleDialogError(data, status, headers, config);
         });
     };
 
@@ -63,13 +71,25 @@ controllers.controller('translationsController', [ '$scope', '$http',
       $http.get('translations').success(
         function(data, status, headers, config) {
           $scope.translations = data;
+        })
+        .error(function(data, status, headers, config) {
+          $scope.error = 'Error loading translations';
+          console.log('HTTP ' + status.toString());
+          if (data) {
+            console.log(JSON.stringify(data));
+          }
         });
     };
 
-    $scope.handleAjaxError = function(data, status, headers, config) {
-        $scope.error = 'HTTP ' + status.toString();
+    $scope.handleDialogError = function(data, status, headers, config) {
         if (data) {
-          $scope.error += ' ' + data.eval().toString();
+          if (data.message) {
+            $scope.dialogError = data.message;
+          } else {
+            $scope.dialogError = JSON.stringify(data);
+          }
+        } else {
+          $scope.dialogError = 'Error';
         }
     }
 

@@ -1,6 +1,5 @@
-var express = require('express')
-  , router = express.Router()
-  ;
+var express = require('express');
+var router = express.Router();
 
 router.get('/', function(req, res) {
   var collection = req.db.get('translations');

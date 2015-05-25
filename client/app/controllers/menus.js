@@ -6,6 +6,8 @@ controllers.controller('menusController', [ '$scope', '$http',
   function($scope, $http) {
 
     $scope.updating = false;
+    $scope.error = null;
+    $scope.info = null;
 
     $scope.refreshLunches = function() {
       $http.get('lunches')
@@ -14,7 +16,7 @@ controllers.controller('menusController', [ '$scope', '$http',
           $scope.menus = data;
         })
         .error( function(data, status, headers, config) {
-          $scope.error = 'Error loading lunches';
+          $scope.error = 'Error loading menus';
           console.log('HTTP ' + status.toString());
           if (data) {
             console.log(JSON.stringify(data));
