@@ -2,6 +2,7 @@
 
 var lunchApp = angular.module('lunchApp', [
   'ngRoute',
+  'ngSanitize',
   'lunchControllers',
   'lunchDirectives'
 ]);

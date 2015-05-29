@@ -1,24 +1,27 @@
-#lunch-translator
+#lunch-tools
 
-MEAN stack application that stores and performs menu translations. Born from the loving nicknames we give our daily catered lunches at [Kabbage](https://github.com/kabbageinc) and a desire to learn a new application stack.
+MEAN stack application that stores lunch menus, performs translations, keeps statistics, and more. Born from the loving nicknames we give our daily catered lunches at [Kabbage](https://www.kabbage.com/) and a desire to learn a new application stack.
 
 [![Build Status](https://travis-ci.org/andrewskaggs/lunch-translator.svg?branch=master)](https://travis-ci.org/andrewskaggs/lunch-translator)
 [![Code Climate](https://codeclimate.com/github/andrewskaggs/lunch-translator/badges/gpa.svg)](https://codeclimate.com/github/andrewskaggs/lunch-translator)
 [![Test Coverage](https://codeclimate.com/github/andrewskaggs/lunch-translator/badges/coverage.svg)](https://codeclimate.com/github/andrewskaggs/lunch-translator)
 
 ###API
-Restful API provided by Express application. Endpoints:
+Restful API provided by [Express](http://expressjs.com/) application. Endpoints:
 * /translations - GET, POST (target, replacement)
 * /translations/{id} -  GET, PUT (target, replacement), DELETE
 * /translate - POST (lunch)
 * /lunches - GET, POST (date, menu)
 * /lunches/{id} - GET, PUT (date, menu), DELETE
+* /lunches/date/YYYY-MM-DD - GET
+* /lunches/update - GET to pull new lunches from RSS feed
+
 
 ###Web Interface
-AngularJS app at / to perform management operations. API consumer.
+[AngularJS](https://angularjs.org/) app built using [Gulp](http://gulpjs.com/). API consumer.
 
 ###Database
-MongoDB connection that defaults to a local instance named "LunchTranslator" without a password. Start it like this:
+[MongoDB](https://www.mongodb.org/) connection that defaults to a local instance named "LunchTranslator" without a password. Start it like this:
 
 ```
 mkdir mongo
@@ -65,5 +68,9 @@ npm install
 npm start
 ```
 
-###IIS Deployment
-Windows and node.js is still pretty tricky but I did get it working with [IISNODE](https://github.com/tjanczuk/iisnode) and included the web.config file. I recommend setting all envrionment variables in the web.config due to the way IIS reads them once per boot. Hosting in an application directory instead of the root requires `LUNCH_TRANSLATOR_BASE_PATH` environment variable be set with the application directory (ie hosting at http://localhost/lunch/ would need a value of "/lunch/").
+###Windows Deployment
+This is is a pain but possible using [IISNODE](https://github.com/tjanczuk/iisnode). Be aware of the following issues:
+* A working _web.config_ file is included
+* Prefer setting your environment variables in the web.config file instead of through Windows. IIS only reads the Windows environment variables once per boot even if you restart it
+* Hosting in an application directory instead of the root requires *LUNCH_TRANSLATOR_BASE_PATH* environment variable be set with the application directory (ie hosting at http://localhost/lunch/ would need a value of "/lunch/").
+* Some of the node packages used depend on the _node-gyp_ package. On Windows this requires Python 2.7.x and Visual Studio 2010 to be installed in order to build correctly.

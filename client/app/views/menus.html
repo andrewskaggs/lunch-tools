@@ -21,7 +21,7 @@
     <tbody>
       <tr ng-repeat="menu in menus | orderBy: 'date'">
         <td>{{ menu.date | date : 'MM/dd/yyyy' }}</td>
-        <td colspan=2>{{ menu.menu }}</td>
+        <td colspan=2 ng-bind-html="menu.menu"></td>
       </tr>
     </tbody>
   </table>
