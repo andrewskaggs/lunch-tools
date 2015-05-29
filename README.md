@@ -65,5 +65,9 @@ npm install
 npm start
 ```
 
-###IIS Deployment
-Windows and node.js is still pretty tricky but I did get it working with [IISNODE](https://github.com/tjanczuk/iisnode) and included the web.config file. I recommend setting all envrionment variables in the web.config due to the way IIS reads them once per boot. Hosting in an application directory instead of the root requires `LUNCH_TRANSLATOR_BASE_PATH` environment variable be set with the application directory (ie hosting at http://localhost/lunch/ would need a value of "/lunch/").
+###Windows Deployment
+This is is a pain but possible using [IISNODE](https://github.com/tjanczuk/iisnode). Be aware of the following issues:
+* A working _web.config_ file is included
+* Prefer setting your environment variables in the web.config file instead of through Windows. IIS only reads the Windows environment variables once per boot even if you restart it
+* Hosting in an application directory instead of the root requires *LUNCH_TRANSLATOR_BASE_PATH* environment variable be set with the application directory (ie hosting at http://localhost/lunch/ would need a value of "/lunch/").
+* Some of the node packages used depend on the _node-gyp_ package. On Windows this requires Python 2.7.x and Visual Studio 2010 to be installed in order to build correctly.
