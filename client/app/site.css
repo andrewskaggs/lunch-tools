@@ -1,5 +1,5 @@
 body {
-  font-family: 'Helvetica Neue', sans-serif;
+  font-family: 'Helvetica Neue', HelveticaNeue, 'Arimo', sans-serif;
 }
 
 .footer {
@@ -9,7 +9,6 @@ body {
 
 .navbar-brand {
   padding: 5px;
-  font-size: 200%;
 }
 
 .navbar-brand img {
