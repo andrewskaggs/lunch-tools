@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var debug = require('debug')('LunchTranslator');
+var debug = require('debug')('LunchTools');
 var nunjucks = require('nunjucks');
 var express = require('express');
 var path = require('path');
@@ -11,9 +11,9 @@ var bodyParser = require('body-parser');
 // mongo initialization
 var mongo = require('mongodb');
 var monk = require('monk');
-var mongoConnectionString = 'localhost:27017/LunchTranslator';
-if (process.env.LUNCH_TRANSLATOR_MONGO) {
-    mongoConnectionString = process.env.LUNCH_TRANSLATOR_MONGO;
+var mongoConnectionString = 'localhost:27017/LunchTools';
+if (process.env.LUNCH_TOOLS_MONGO) {
+    mongoConnectionString = process.env.LUNCH_TOOLS_MONGO;
 }
 var db = monk(mongoConnectionString);
 
@@ -33,10 +33,10 @@ app.use(function(req,res,next){req.db = db;next();});
 
 // routing setup  - iisnode feeds in the whole path instead of
 // the application directory relative path so windows deployments
-// need to set the LUNCH_TRANSLATOR_BASE_PATH environment variable
+// need to set the LUNCH_TOOLS_BASE_PATH environment variable
 var routeBase = '/';
-if (process.env.LUNCH_TRANSLATOR_BASE_PATH) {
-	routeBase = process.env.LUNCH_TRANSLATOR_BASE_PATH;
+if (process.env.LUNCH_TOOLS_BASE_PATH) {
+	routeBase = process.env.LUNCH_TOOLS_BASE_PATH;
 }
 
 // route static files
