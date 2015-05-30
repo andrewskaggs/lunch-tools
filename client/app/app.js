@@ -3,6 +3,7 @@
 var lunchApp = angular.module('lunchApp', [
   'ngRoute',
   'ngSanitize',
+  'slick',
   'lunchControllers',
   'lunchDirectives'
 ]);

@@ -1,22 +1,29 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var del = require('del');
+bower = require('gulp-bower');
 
 var paths = {
+    appDir: 'app/**',
     buildDir: 'build/',
-    distDir:  '../server/client/'
+    distDir:  '../server/client/',
+    bowerDir: 'bower_components/'
 };
 
-gulp.task('default', ['clean', 'deploy', 'browser-sync', 'watch']);
+gulp.task('default', ['clean', 'bower', 'deploy', 'browser-sync', 'watch']);
+
+gulp.task('bower', function() { 
+    return bower().pipe(gulp.dest(paths.distDir + paths.bowerDir)) ;
+});
 
 gulp.task('clean', function() {
     del.sync([paths.buildDir, paths.distDir], { force: true });
 });
 
 gulp.task('deploy', function() {
-    gulp.src('app/**')
+    gulp.src(paths.appDir)
     // Perform minification tasks, etc here
-    .pipe(gulp.dest('../server/client'));
+    .pipe(gulp.dest(paths.distDir));
 });
 
 gulp.task('reload', function() {
@@ -31,5 +38,6 @@ gulp.task('browser-sync', function() {
 });
 
 gulp.task('watch', function () {
-    gulp.watch("app/**", ['deploy', 'reload']);
+    gulp.watch(paths.bowerDir, ['bower', 'reload']);
+    gulp.watch(paths.appDir, ['deploy', 'reload']);
 });

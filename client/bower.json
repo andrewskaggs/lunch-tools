@@ -1,0 +1,26 @@
+{
+  "name": "lunch-tools-client",
+  "version": "0.0.0",
+  "homepage": "https://github.com/andrewskaggs/lunch-tools",
+  "authors": [
+    "Andrew Skaggs <andrew@andrewskaggs.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-slick": "0.2.1",
+    "moment": "2.10.3",
+    "angular": "1.3.15",
+    "angular-route": "1.3.15",
+    "angular-sanitize": "1.3.15",
+    "jquery": "2.1.4",
+    "bootstrap": "3.3.4",
+    "fontawesome": "4.3.0"
+  }
+}

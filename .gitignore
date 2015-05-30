@@ -32,5 +32,6 @@ mongo
 
 #build outputs
 client/build
+client/bower_components
 server/client
 server/iisnode

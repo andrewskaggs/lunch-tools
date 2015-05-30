@@ -1,16 +1,23 @@
 <div class="row"><h2>Show Me</h2></div>
 
 <div class="row">
+  <div class="text-info bg-info lunch-alert" ng-if="info"><i class="fa fa-info-circle fa-lg"></i>{{ info }}</div>
+  <div class="text-danger bg-danger lunch-alert" ng-if="error"><i class="fa fa-warning fa-lg"></i>{{ error }}</div>
+</div>
+
+<div class="row">
   <button type="button" class="btn btn-default" ng-click="previousDay();"><i class="fa fa-chevron-left fa-2x"></i></button>
-  <b>{{ lunch.date | date : 'MM/dd/yyyy' }}</b>
   <button type="button" class="btn btn-default" ng-click="nextDay();"><i class="fa fa-chevron-right fa-2x"></i></button>
 </div>
 <div class="row">
-  <div ng-if="lunch.menu">
+  {{ m.format("YYYY-MM-DD") }}
+  <div ng-if="lunch.image" class="showme">
+    <p ng-bind-html="lunch.menu"></p>
     <img ng-src="{{ lunch.image }}" class="img-responsive"><br/>
-    {{ lunch.translation }}
   </div>
-  <div ng-if="! lunch.menu">
-    <h2>No Lunch Found!</h2>
+  <div ng-if="! lunch">
+    <p>No Menu Found</p>
+    <i class="fa fa-question-circle fa-5x"></i>
   </div>
+
 </div>

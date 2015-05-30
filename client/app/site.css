@@ -29,3 +29,8 @@ button.navbar-toggle {
 .lunch-alert i {
   margin-right: 10px;
 }
+
+.showme img {
+  max-width: 500px;
+  max-height: 500px;
+}
