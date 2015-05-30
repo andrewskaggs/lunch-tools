@@ -90,8 +90,8 @@ router.delete('/:id', function(req, res) {
 });
 
 function checkFeed(req, res) {
-  if (process.env.LUNCH_TRANSLATOR_RSS) {
-    var rssAddress = process.env.LUNCH_TRANSLATOR_RSS;
+  if (process.env.LUNCH_TOOLS_RSS) {
+    var rssAddress = process.env.LUNCH_TOOLS_RSS;
     var options = {};
     parser.parseURL(rssAddress, options, function(err, out){
       if (err) {
@@ -131,7 +131,7 @@ function checkFeed(req, res) {
       }
     });
   } else {
-    var errorMessage = 'LUNCH_TRANSLATOR_RSS variable not found';
+    var errorMessage = 'LUNCH_TOOLS_RSS variable not found';
     console.log(errorMessage);
     res.status(500).send(errorMessage);
   }

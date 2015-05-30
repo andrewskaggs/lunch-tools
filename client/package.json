@@ -1,5 +1,5 @@
 {
-  "name": "lunch-translator-client",
+  "name": "lunch-tools-client",
   "version": "0.0.0",
   "scripts": {
     "test": "echo wut"
@@ -11,7 +11,5 @@
   "devDependencies": {
     "browser-sync": "^2.5.2"
   },
-  "test": {
-
-  }
+  "test": {}
 }

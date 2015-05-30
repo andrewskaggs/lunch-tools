@@ -3,7 +3,7 @@ var express = require('express')
   ;
 
 router.get('/', function(req, res) {
-  res.render('translate.html', { title: 'Lunch Translator API' });
+  res.render('translate.html', { title: 'Lunch Tools API' });
 });
 
 router.post('/', function(req, res) {
