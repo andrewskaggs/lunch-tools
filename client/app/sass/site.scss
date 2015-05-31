@@ -1,3 +1,5 @@
+@import 'bootstrap';
+
 body {
   font-family: 'Helvetica Neue', HelveticaNeue, 'Arimo', sans-serif;
 }
@@ -30,7 +32,26 @@ button.navbar-toggle {
   margin-right: 10px;
 }
 
+.showme-date{
+  text-align: center;
+  font-weight: bold;
+}
+
+.showme-button {
+  text-align: center;
+  @media screen and (min-width: $screen-sm-min) {
+    margin-top: 150px;
+  }
+}
+
+.showme {
+  align: center;
+  text-align: center;
+}
+
 .showme img {
+  margin-left: auto;
+  margin-right: auto;
   max-width: 500px;
   max-height: 500px;
 }
