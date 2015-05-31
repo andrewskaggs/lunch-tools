@@ -1,7 +1,8 @@
 @import 'bootstrap';
+@import url(http://fonts.googleapis.com/css?family=Arimo|Bangers);
 
 body {
-  font-family: 'Helvetica Neue', HelveticaNeue, 'Arimo', sans-serif;
+  font-family: 'Arimo', 'Helvetica Neue', HelveticaNeue, sans-serif;
 }
 
 .footer {
@@ -13,10 +14,25 @@ body {
   padding: 5px;
 }
 
-.navbar-brand img {
+.navbar-brand-name {
+  display: inline-block;
+  float: left;
+  font-size: xx-large;
+  color: black;
+  font-family: 'Bangers', cursive;
+}
+
+.navbar-brand-name img {
+  display: inline-block;
   height: 40px;
   width: 40px;
 }
+
+.navbar-brand-name p {
+  display: inline-block;
+  margin-left: 10px;
+}
+
 
 button.navbar-toggle {
   margin: 5px;
