@@ -5,9 +5,23 @@ body {
   font-family: 'Arimo', 'Helvetica Neue', HelveticaNeue, sans-serif;
 }
 
+h2 {
+  text-align: center;
+}
+
 .footer {
   text-align: center;
-  margin-top: 40px;
+  margin-top: 50px;
+}
+
+.footer img {
+  display: inline-block;
+  height: 32px;
+  width: 32px;
+  margin-top: 12px;
+  margin-bottom: 5px;
+  -webkit-filter: opacity(50%);
+  vertical-align: center;
 }
 
 .navbar-brand {
@@ -31,11 +45,30 @@ body {
 .navbar-brand-name p {
   display: inline-block;
   margin-left: 10px;
+  vertical-align: bottom;
 }
-
 
 button.navbar-toggle {
   margin: 5px;
+}
+
+.collapsible-button {
+  @media screen and (min-width: $screen-sm-min) {
+    display: inline;
+  }
+  @media screen and (max-width: $screen-xs-max) {
+    display: none;
+  }
+}
+
+.buttons-header {
+  text-align: right;
+  @media screen and (min-width: $screen-sm-min) {
+    min-width: 170px;
+  }
+  @media screen and (max-width: $screen-xs-max) {
+    min-width: 110px;
+  }
 }
 
 .lunch-alert {
