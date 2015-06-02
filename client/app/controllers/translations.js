@@ -35,7 +35,7 @@ controllers.controller('translationsController', [ '$scope', '$http',
 
       if ($scope._id) {
         verb = 'PUT';
-        url = url + '/' + $scope._id
+        url = url + '/' + $scope._id;
       }
       else {
         verb = 'POST';
@@ -91,7 +91,7 @@ controllers.controller('translationsController', [ '$scope', '$http',
         } else {
           $scope.dialogError = 'Error';
         }
-    }
+    };
 
     $scope.refresh();
   }

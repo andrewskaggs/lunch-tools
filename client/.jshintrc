@@ -1,0 +1,6 @@
+{
+    // See http://jshint.com/docs/ for more details
+
+    // Custom Globals
+    "globals"       : {"angular"}        // additional predefined global variables
+}

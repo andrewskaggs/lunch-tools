@@ -41,7 +41,7 @@ controllers.controller('menusController', [ '$scope', '$http',
             console.log(JSON.stringify(data));
           }
         });
-    }
+    };
 
     $scope.refreshLunches();
   }

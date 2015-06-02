@@ -24,8 +24,9 @@ controllers.controller('showMeController', [ '$scope', '$http',
             //console.log(JSON.stringify(data));
             if (data.responseData.results.length > 0) {
               var imageNumber = Math.floor((Math.random() * 5) );
-              if (data.responseData.results.length < imageNumber)
-                imageNumber = 0;
+              if (data.responseData.results.length < imageNumber) {
+                imageNumber = 0;                
+              }
               $scope.lunch.image = data.responseData.results[imageNumber].unescapedUrl;
             }
           });
