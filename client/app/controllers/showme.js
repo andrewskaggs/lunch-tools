@@ -46,12 +46,26 @@ controllers.controller('showMeController', [ '$scope', '$http',
     };
 
     $scope.nextDay = function() {
-      $scope.m.add(1, 'days');
+      var daysToAdd = 1;
+      if (!$scope.weekends && $scope.m.day() === 5) {
+        daysToAdd = 3;
+      }
+      if (!$scope.weekends && $scope.m.day() === 6) {
+        daysToAdd = 2;
+      }
+      $scope.m.add(daysToAdd, 'days');
       $scope.getLunch($scope.m.format('YYYY-MM-DD'))
     };
 
     $scope.previousDay = function() {
-      $scope.m.add(-1, 'days');
+      var daysToAdd = -1;
+      if (!$scope.weekends && $scope.m.day() === 0) {
+        daysToAdd = -2;
+      }
+      if (!$scope.weekends && $scope.m.day() === 1) {
+        daysToAdd = -3;
+      }
+      $scope.m.add(daysToAdd, 'days');
       $scope.getLunch($scope.m.format('YYYY-MM-DD'))
     };
 
