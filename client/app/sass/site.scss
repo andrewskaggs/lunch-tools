@@ -104,3 +104,22 @@ button.navbar-toggle {
   max-width: 500px;
   max-height: 500px;
 }
+
+.showme-settings {
+  text-align: center;
+}
+
+.toggle {
+  display: inline-block;
+}
+
+.toggle i {
+  vertical-align: middle;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.toggle a {
+  text-decoration: none;
+  color: $text-color;
+}
