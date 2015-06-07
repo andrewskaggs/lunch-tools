@@ -22,7 +22,7 @@
     <div class="showme">
       <p ng-bind-html="lunch.translation"></p>
       <div ng-if="lunch.image">
-        <img ng-src="{{ lunch.image }}" class="img-responsive"><br/>
+        <img ng-src="{{ lunch.image }}" ng-click="nextDay()" class="img-responsive"><br/>
       </div>
       <div ng-if="!lunch.image">
         <i class="fa fa-question-circle fa-5x"></i>
