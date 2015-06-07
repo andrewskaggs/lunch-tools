@@ -2,16 +2,18 @@
 
 var controllers = angular.module('lunchControllers');
 
-controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookieStore',
-  function($scope, $http, $q, $cookieStore) {
+controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies',
+  function($scope, $http, $q, $cookies) {
 
     var dateFormat = 'YYYY-MM-DD';
+    var translateCookieName = 'lunchtools.showme.translate';
+    var skipWeekendsCookieName = 'lunchtools.showme.skipWeekends';
 
     $scope.initialize = function() {
       // try to pull settings from cookies else set to defaults
       $scope.settings = {
-        translate: $cookieStore.get('lunchtools.showme.translate'),
-        skipWeekends: $cookieStore.get('lunchtools.showme.skipWeekends')
+        translate: $cookies.getObject(translateCookieName),
+        skipWeekends: $cookies.getObject(skipWeekendsCookieName)
       };
       if ($scope.settings.translate == null) {
         $scope.settings.translate = true;
@@ -150,22 +152,24 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookieSt
       $scope.update($scope.m.format(dateFormat))
     };
 
-    $scope.$watch(
-      function(scope) {
-        return scope.settings.translate;
-      },
+    $scope.$watch('settings.translate',
       function() {
-        $cookieStore.put('lunchtools.showme.translate', $scope.settings.translate);
+        $cookies.putObject(translateCookieName, $scope.settings.translate, {
+          expires: moment().add(10,'years').toDate()
+        });
         $scope.update($scope.m.format(dateFormat))
       }
     );
 
-    $scope.$watch(
-      function(scope) {
-        return scope.settings.skipWeekends;
-      },
+    $scope.$watch('settings.skipWeekends',
       function() {
-        $cookieStore.put('lunchtools.showme.skipWeekends', $scope.settings.skipWeekends);
+        $cookies.putObject(skipWeekendsCookieName, $scope.settings.skipWeekends, {
+          expires: moment().add(10,'years').toDate()
+        });
+        var day = $scope.m.day();
+        if ($scope.settings.skipWeekends && (day == 0 || day == 6)) {
+          $scope.nextDay();
+        }
       }
     );
 
