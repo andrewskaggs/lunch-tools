@@ -2,8 +2,8 @@
 
 var controllers = angular.module('lunchControllers');
 
-controllers.controller('translationsController', [ '$scope', '$http',
-  function($scope, $http) {
+controllers.controller('translationsController', [ '$scope', '$http', '$sanitize',
+  function($scope, $http, $sanitize) {
 
     $scope.initialize = function() {
       $scope.info = null;
@@ -50,7 +50,7 @@ controllers.controller('translationsController', [ '$scope', '$http',
         method: verb,
         data: {
           target: $scope.target,
-          replacement: $scope.replacement
+          replacement: $sanitize($scope.replacement)
          }
       }).success(function(data, status, headers, config) {
         $('#editModal').modal('hide');
