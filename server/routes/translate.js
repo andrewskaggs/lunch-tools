@@ -15,7 +15,7 @@ router.post('/', function(req, res) {
       function(err, result) {
         result.forEach(
           function(value, index, array1){
-            lunch = lunch.replace(new RegExp(value.target, 'i'), value.replacement);
+            lunch = lunch.replace(new RegExp(value.target, 'ig'), value.replacement);
           });
         res.json({ result: lunch });
       });

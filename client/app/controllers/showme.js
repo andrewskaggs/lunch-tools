@@ -9,11 +9,7 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q',
       translate: true,
       skipWeekends: true
     };
-    $scope.emptyLunch = {
-      menu: 'No Menu Found',
-      image: null
-    }
-    $scope.lunch = $scope.emptyLunch;
+    $scope.lunch = null;
     $scope.error = null;
 
     $scope.initializeDate = function() {
@@ -27,19 +23,19 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q',
     }
 
     $scope.update = function(date) {
+      $scope.lunch = null;
       $scope.error = null;
-      $scope.lunch = $scope.emptyLunch;
 
       $scope.getLunch(date)
         .then(function(lunch) {
-          $scope.lunch = lunch;
           if (lunch) {
-            $scope.getImage(lunch.menu).then($scope.setImage, $scope.errorHandler);
+            $scope.lunch = lunch;
             if ($scope.settings.translate) {
               $scope.getTranslation(lunch.menu).then($scope.setTranslation, $scope.errorHandler)
             } else {
               $scope.lunch.translation = lunch.menu;
             }
+            $scope.getImage(lunch.menu).then($scope.setImage, $scope.errorHandler);
           }
         }, $scope.errorHandler)
     };
