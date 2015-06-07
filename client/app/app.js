@@ -4,6 +4,7 @@ var lunchApp = angular.module('lunchApp', [
   'ngRoute',
   'ngSanitize',
   'ngCookies',
+  'ngTouch',
   'lunchControllers',
   'lunchDirectives'
 ]);

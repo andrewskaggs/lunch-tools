@@ -21,6 +21,7 @@
     "jquery": "2.1.4",
     "fontawesome": "4.3.0",
     "bootstrap-sass": "3.3.4",
-    "angular-cookies": "1.4.0"
+    "angular-cookies": "1.4.0",
+    "angular-touch": "1.4.0"
   }
 }
