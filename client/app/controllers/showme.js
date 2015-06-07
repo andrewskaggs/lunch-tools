@@ -62,9 +62,13 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
     $scope.getImage = function(menu) {
       return $q(function(resolve, reject) {
         var firstMenuItem = $scope.lunch.menu.split(';')[0];
+        var safeSearch = 'off';
+        if ($scope.settings.safeSearch) {
+          safeSearch = 'moderate';
+        }
         $http.jsonp('http://ajax.googleapis.com/ajax/services/search/images', {
           method: 'GET',
-          params: {v: '1.0', q: firstMenuItem, callback: 'JSON_CALLBACK', safe: 'off', rsz: '5' }
+          params: {v: '1.0', q: firstMenuItem, callback: 'JSON_CALLBACK', safe: safeSearch, rsz: '5' }
         }).success(function(data, status, headers, config) {
           if (data.responseData.results.length > 0) {
             var imageNumber = Math.floor((Math.random() * 5) );
@@ -151,7 +155,8 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
       if (!settings) {
           settings = {
             translate: true,
-            skipWeekends: true
+            skipWeekends: true,
+            safeSearch: false
           };
       }
       return settings;
@@ -171,6 +176,13 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
         if ($scope.settings.skipWeekends && (day == 0 || day == 6)) {
           $scope.nextDay();
         }
+      }
+    );
+
+    $scope.$watch('settings.safeSearch',
+      function() {
+        $scope.saveSettings($scope.settings);
+        $scope.update($scope.m.format(dateFormat));
       }
     );
 
