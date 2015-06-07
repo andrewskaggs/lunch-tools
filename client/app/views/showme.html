@@ -12,13 +12,7 @@
 </div>
 
 <div class="row">
-  <div class="showme-button col-xs-6 col-sm-2">
-    <a class="btn btn-default" role="button" ng-click="previousDay();"><i class="fa fa-chevron-left fa-2x"></i></a>
-  </div>
-  <div class="showme-button col-xs-6 col-sm-2 col-sm-push-8">
-    <a class="btn btn-default" role="button" ng-click="nextDay();"><i class="fa fa-chevron-right fa-2x"></i></a>
-  </div>
-  <div class="col-xs-12 col-sm-8 col-sm-pull-2">
+  <div class="col-xs-12 col-sm-8 col-sm-push-2">
     <div class="showme">
       <p ng-bind-html="lunch.translation"></p>
       <div ng-if="lunch.image">
@@ -28,6 +22,12 @@
         <i class="fa fa-question-circle fa-5x"></i>
       </div>
     </div>
+  </div>
+  <div class="showme-button col-xs-6 col-sm-2 col-sm-pull-8">
+    <a class="btn btn-default" role="button" ng-click="previousDay();"><i class="fa fa-chevron-left fa-2x"></i></a>
+  </div>
+  <div class="showme-button col-xs-6 col-sm-2">
+    <a class="btn btn-default" role="button" ng-click="nextDay();"><i class="fa fa-chevron-right fa-2x"></i></a>
   </div>
 </div>
 

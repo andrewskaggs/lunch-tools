@@ -1,8 +1,8 @@
 @import 'bootstrap';
-@import url(http://fonts.googleapis.com/css?family=Arimo|Bangers);
+@import url(http://fonts.googleapis.com/css?family=Arimo:400,700|Bangers);
 
 body {
-  font-family: 'Arimo', 'Helvetica Neue', HelveticaNeue, sans-serif;
+  font-family: 'Arimo', 'Helvetica Neue', Helvetica, sans-serif;
 }
 
 h2 {
@@ -84,10 +84,16 @@ button.navbar-toggle {
 .showme-date{
   text-align: center;
   font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .showme-button {
   text-align: center;
+  @media screen and (max-width: $screen-xs-max) {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
   @media screen and (min-width: $screen-sm-min) {
     margin-top: 150px;
   }
@@ -101,8 +107,16 @@ button.navbar-toggle {
 .showme img {
   margin-left: auto;
   margin-right: auto;
-  max-width: 500px;
-  max-height: 500px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  @media screen and (max-width: $screen-xs-max) {
+    max-width: 300px;
+    max-height: 300px;
+  }
+  @media screen and (min-width: $screen-sm-min) {
+    max-width: 500px;
+    max-height: 500px;
+  }
 }
 
 .showme-settings {
