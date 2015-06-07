@@ -35,6 +35,6 @@ directives.directive('lunchTab', [ '$location',
         });
 
       }
-    }
+    };
   }
 ]);

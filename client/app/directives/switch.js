@@ -12,5 +12,5 @@ directives.directive('lunchSwitch',
       },
       replace: true,
       transclude: true
-    }
+    };
   });

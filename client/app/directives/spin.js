@@ -12,6 +12,6 @@ directives.directive('lunchSpin',
           angular.element('.lunch-spin').toggleClass('fa-spin');
         });
       }
-    }
+    };
   }
 );

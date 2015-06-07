@@ -20,7 +20,7 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
       } else {
         $scope.update($scope.m.format(dateFormat));
       }
-    }
+    };
 
     $scope.update = function(date) {
       $scope.lunch = null;
@@ -37,7 +37,7 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
             }
             $scope.getImage(lunch.menu).then($scope.setImage, $scope.errorHandler);
           }
-        }, $scope.errorHandler)
+        }, $scope.errorHandler);
     };
 
     $scope.getLunch = function(date) {
@@ -57,14 +57,14 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
             reject('Error loading menus');
           });
       });
-    }
+    };
 
     $scope.getImage = function(menu) {
       return $q(function(resolve, reject) {
         var firstMenuItem = $scope.lunch.menu.split(';')[0];
         var safeSearch = 'off';
         if ($scope.settings.safeSearch) {
-          safeSearch = 'moderate';
+          safeSearch = 'active';
         }
         $http.jsonp('http://ajax.googleapis.com/ajax/services/search/images', {
           method: 'GET',
@@ -83,7 +83,7 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
           reject('Error loading image');
         });
       });
-    }
+    };
 
     $scope.setImage = function(imageUrl) {
       $scope.lunch.image = imageUrl;
@@ -110,15 +110,15 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
           resolve(menu);
         }
       });
-    }
+    };
 
     $scope.setTranslation = function(translation) {
       $scope.lunch.translation = translation;
-    }
+    };
 
     $scope.errorHandler = function(errorMessage) {
       $scope.error = errorMessage;
-    }
+    };
 
     $scope.nextDay = function() {
       var daysToAdd = 1;
@@ -129,8 +129,8 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
         daysToAdd = 2;
       }
       $scope.m.add(daysToAdd, 'days');
-      $scope.update($scope.m.format(dateFormat))
-    }
+      $scope.update($scope.m.format(dateFormat));
+    };
 
     $scope.previousDay = function() {
       var daysToAdd = -1;
@@ -142,13 +142,13 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
       }
       $scope.m.add(daysToAdd, 'days');
       $scope.update($scope.m.format(dateFormat))
-    }
+    };
 
     $scope.saveSettings = function(settings) {
       $cookies.putObject(cookieName, settings, {
         expires: moment().add(10,'years').toDate()
       });
-    }
+    };
 
     $scope.loadSettings = function() {
       var settings = $cookies.getObject(cookieName);
@@ -160,7 +160,7 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
           };
       }
       return settings;
-    }
+    };
 
     $scope.$watch('settings.translate',
       function() {

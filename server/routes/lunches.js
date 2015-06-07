@@ -121,7 +121,7 @@ function checkFeed(req, res) {
           lunches.push(lunch);
 
           req.db.get('lunches').find({ date: lunch.date },{}, function(err, result) {
-            if (result.length == 0) {
+            if (result.length === 0) {
               req.db.get('lunches').insert( lunch ,{});
             }
           });
@@ -135,7 +135,7 @@ function checkFeed(req, res) {
     console.log(errorMessage);
     res.status(500).send(errorMessage);
   }
-};
+}
 
 function update(lunch, req, res) {
   if (req.body.date)
@@ -153,6 +153,6 @@ function update(lunch, req, res) {
         res.status(500).send(err);
       }
     });
-};
+}
 
 module.exports = router;

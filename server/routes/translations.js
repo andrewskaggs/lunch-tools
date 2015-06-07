@@ -68,7 +68,7 @@ function update(translation, req, res) {
     translation.target = req.body.target;
 
   if (req.body.replacement)
-    translation.replacement = req.body.replacement
+    translation.replacement = req.body.replacement;
 
   req.db.get('translations').updateById(translation._id, translation,
     function(err, result) {
@@ -79,7 +79,7 @@ function update(translation, req, res) {
         res.status(500).send(err);
       }
     });
-};
+}
 
 router.delete('/:id', function(req, res) {
   req.db.get('translations').removeById(req.params.id,
