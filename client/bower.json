@@ -14,13 +14,13 @@
     "tests"
   ],
   "dependencies": {
-    "angular-slick": "0.2.1",
     "moment": "2.10.3",
     "angular": "1.3.15",
     "angular-route": "1.3.15",
     "angular-sanitize": "1.3.15",
     "jquery": "2.1.4",
     "fontawesome": "4.3.0",
-    "bootstrap-sass": "3.3.4"
+    "bootstrap-sass": "3.3.4",
+    "angular-cookies": "1.3.15"
   }
 }

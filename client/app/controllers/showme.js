@@ -2,16 +2,24 @@
 
 var controllers = angular.module('lunchControllers');
 
-controllers.controller('showMeController', [ '$scope', '$http', '$q',
-  function($scope, $http, $q) {
+controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookieStore',
+  function($scope, $http, $q, $cookieStore) {
 
     var dateFormat = 'YYYY-MM-DD';
 
     $scope.initialize = function() {
+      // try to pull settings from cookies else set to defaults
       $scope.settings = {
-        translate: true,
-        skipWeekends: true
+        translate: $cookieStore.get('lunchtools.showme.translate'),
+        skipWeekends: $cookieStore.get('lunchtools.showme.skipWeekends')
       };
+      if ($scope.settings.translate == null) {
+        $scope.settings.translate = true;
+      }
+      if ($scope.settings.skipWeekends == null) {
+        $scope.settings.skipWeekends = true;
+      }
+
       $scope.lunch = null;
       $scope.error = null;
       $scope.m = moment();
@@ -147,7 +155,17 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q',
         return scope.settings.translate;
       },
       function() {
+        $cookieStore.put('lunchtools.showme.translate', $scope.settings.translate);
         $scope.update($scope.m.format(dateFormat))
+      }
+    );
+
+    $scope.$watch(
+      function(scope) {
+        return scope.settings.skipWeekends;
+      },
+      function() {
+        $cookieStore.put('lunchtools.showme.skipWeekends', $scope.settings.skipWeekends);
       }
     );
 
