@@ -5,20 +5,22 @@ var controllers = angular.module('lunchControllers');
 controllers.controller('showMeController', [ '$scope', '$http', '$q',
   function($scope, $http, $q) {
 
-    $scope.settings = {
-      translate: true,
-      skipWeekends: true
-    };
-    $scope.lunch = null;
-    $scope.error = null;
+    var dateFormat = 'YYYY-MM-DD';
 
-    $scope.initializeDate = function() {
+    $scope.initialize = function() {
+      $scope.settings = {
+        translate: true,
+        skipWeekends: true
+      };
+      $scope.lunch = null;
+      $scope.error = null;
       $scope.m = moment();
+
       var day = $scope.m.day();
       if ($scope.settings.skipWeekends && (day == 0 || day == 6)) {
         $scope.nextDay();
       } else {
-        $scope.update($scope.m.format('YYYY-MM-DD'));
+        $scope.update($scope.m.format(dateFormat));
       }
     }
 
@@ -125,7 +127,7 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q',
         daysToAdd = 2;
       }
       $scope.m.add(daysToAdd, 'days');
-      $scope.update($scope.m.format('YYYY-MM-DD'))
+      $scope.update($scope.m.format(dateFormat))
     };
 
     $scope.previousDay = function() {
@@ -137,7 +139,7 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q',
         daysToAdd = -3;
       }
       $scope.m.add(daysToAdd, 'days');
-      $scope.update($scope.m.format('YYYY-MM-DD'))
+      $scope.update($scope.m.format(dateFormat))
     };
 
     $scope.$watch(
@@ -145,10 +147,10 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q',
         return scope.settings.translate;
       },
       function() {
-        $scope.update($scope.m.format('YYYY-MM-DD'))
+        $scope.update($scope.m.format(dateFormat))
       }
     );
 
-    $scope.initializeDate();
+    $scope.initialize();
   }
 ]);

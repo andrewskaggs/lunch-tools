@@ -5,9 +5,13 @@ var controllers = angular.module('lunchControllers');
 controllers.controller('menusController', [ '$scope', '$http',
   function($scope, $http) {
 
-    $scope.updating = false;
-    $scope.error = null;
-    $scope.info = null;
+    $scope.initialize = function() {
+      $scope.updating = false;
+      $scope.error = null;
+      $scope.info = null;
+
+      $scope.refreshLunches();
+    }
 
     $scope.refreshLunches = function() {
       $http.get('lunches')
@@ -43,7 +47,7 @@ controllers.controller('menusController', [ '$scope', '$http',
         });
     };
 
-    $scope.refreshLunches();
+    $scope.initialize();
   }
 
 ]);

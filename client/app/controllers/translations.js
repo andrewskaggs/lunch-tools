@@ -5,9 +5,13 @@ var controllers = angular.module('lunchControllers');
 controllers.controller('translationsController', [ '$scope', '$http',
   function($scope, $http) {
 
-    $scope.info = null;
-    $scope.error = null;
-    $scope.dialogError = null;
+    $scope.initialize = function() {
+      $scope.info = null;
+      $scope.error = null;
+      $scope.dialogError = null;
+
+      $scope.refresh();
+    }
 
     $scope.edit = function(id) {
         if (id) {
@@ -93,6 +97,7 @@ controllers.controller('translationsController', [ '$scope', '$http',
         }
     };
 
-    $scope.refresh();
+    $scope.initialize();
+
   }
 ]);
