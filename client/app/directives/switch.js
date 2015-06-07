@@ -2,11 +2,11 @@
 
 var directives = angular.module('lunchDirectives');
 
-directives.directive('lunchToggle',
+directives.directive('lunchSwitch',
   function() {
     return {
       restrict: 'E',
-      templateUrl: 'views/toggle.html',
+      templateUrl: 'views/switch.html',
       scope: {
         field: '='
       },
