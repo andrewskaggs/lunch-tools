@@ -6,22 +6,10 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
   function($scope, $http, $q, $cookies) {
 
     var dateFormat = 'YYYY-MM-DD';
-    var translateCookieName = 'lunchtools.showme.translate';
-    var skipWeekendsCookieName = 'lunchtools.showme.skipWeekends';
+    var cookieName = 'lunchtools.showme.settings';
 
     $scope.initialize = function() {
-      // try to pull settings from cookies else set to defaults
-      $scope.settings = {
-        translate: $cookies.getObject(translateCookieName),
-        skipWeekends: $cookies.getObject(skipWeekendsCookieName)
-      };
-      if ($scope.settings.translate == null) {
-        $scope.settings.translate = true;
-      }
-      if ($scope.settings.skipWeekends == null) {
-        $scope.settings.skipWeekends = true;
-      }
-
+      $scope.settings = $scope.loadSettings();
       $scope.lunch = null;
       $scope.error = null;
       $scope.m = moment();
@@ -138,7 +126,7 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
       }
       $scope.m.add(daysToAdd, 'days');
       $scope.update($scope.m.format(dateFormat))
-    };
+    }
 
     $scope.previousDay = function() {
       var daysToAdd = -1;
@@ -150,22 +138,35 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
       }
       $scope.m.add(daysToAdd, 'days');
       $scope.update($scope.m.format(dateFormat))
-    };
+    }
+
+    $scope.saveSettings = function(settings) {
+      $cookies.putObject(cookieName, settings, {
+        expires: moment().add(10,'years').toDate()
+      });
+    }
+
+    $scope.loadSettings = function() {
+      var settings = $cookies.getObject(cookieName);
+      if (!settings) {
+          settings = {
+            translate: true,
+            skipWeekends: true
+          };
+      }
+      return settings;
+    }
 
     $scope.$watch('settings.translate',
       function() {
-        $cookies.putObject(translateCookieName, $scope.settings.translate, {
-          expires: moment().add(10,'years').toDate()
-        });
-        $scope.update($scope.m.format(dateFormat))
+        $scope.saveSettings($scope.settings);
+        $scope.update($scope.m.format(dateFormat));
       }
     );
 
     $scope.$watch('settings.skipWeekends',
       function() {
-        $cookies.putObject(skipWeekendsCookieName, $scope.settings.skipWeekends, {
-          expires: moment().add(10,'years').toDate()
-        });
+        $scope.saveSettings($scope.settings);
         var day = $scope.m.day();
         if ($scope.settings.skipWeekends && (day == 0 || day == 6)) {
           $scope.nextDay();
