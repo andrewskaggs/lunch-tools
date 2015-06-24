@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var parser = require('rssparser');
 var moment = require('moment');
+var Markov = require('blather');
 
 router.get('/', function(req, res) {
   var collection = req.db.get('lunches');
@@ -18,6 +19,10 @@ router.get('/', function(req, res) {
 
 router.get('/update', function(req, res) {
   checkFeed(req, res);
+});
+
+router.get('/generate', function(req, res) {
+  generate(req, res);
 });
 
 router.get('/date/:date', function(req, res) {
@@ -128,6 +133,7 @@ function checkFeed(req, res) {
 
         });
         res.status(200).send(lunches);
+        refreshMarkovChain(req, res);
       }
     });
   } else {
@@ -135,6 +141,53 @@ function checkFeed(req, res) {
     console.log(errorMessage);
     res.status(500).send(errorMessage);
   }
+}
+
+function getMarkovChain(db) {
+  var chains = db.get('lunch_markov_chains');
+  return chains.findOne({key: 'primary_chain'});
+}
+
+function refreshMarkovChain(req, res, next) {
+  getMarkovChain(req.db)
+      .on('error', function(err) {
+        res.status(500).send(err);
+      })
+      .on('success', function(dbchain) {
+        if(!dbchain) {
+          var nchain = new Markov();
+          chains.insert({
+            key: 'primary_chain',
+            dictionary: nchain.dictionary
+          }).success(function(doc) {
+            return refreshMarkovChain(req, res, next);
+          });
+        } else {
+          var chain = new Markov();
+
+          req.db.get('lunches')
+              .find({})
+              .success(function(lunches) {
+                lunches.forEach(function(lunch) { chain.addText(lunch.menu); });
+
+                chains.updateById(dbchain._id, {
+                  key: 'primary_chain', dictionary: chain.dictionary
+                });
+              });
+        }
+
+      });
+}
+
+function generate(req, res, next) {
+  getMarkovChain(req.db)
+      .on('success', function(dbchain) {
+        var chain = new Markov();
+        chain.dictionary = dbchain.dictionary;
+        var generatedMenu = chain.sentence();
+
+        res.status(200).send(generatedMenu);
+      })
 }
 
 function update(lunch, req, res) {
