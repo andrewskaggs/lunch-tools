@@ -159,20 +159,23 @@ function refreshMarkovChain(req, res, next) {
           chains.insert({
             key: 'primary_chain',
             dictionary: nchain.dictionary
+          }).success(function(doc) {
+            return refreshMarkovChain(req, res, next);
           });
-          return refreshMarkovChain(req, res, next);
-        }
-        var chain = new Markov();
+        } else {
+          var chain = new Markov();
 
-        req.db.get('lunches')
-            .find({})
-            .success(function(lunches) {
-              lunches.forEach(function(lunch) { chain.addText(lunch.menu); });
+          req.db.get('lunches')
+              .find({})
+              .success(function(lunches) {
+                lunches.forEach(function(lunch) { chain.addText(lunch.menu); });
 
-              chains.updateById(dbchain._id, {
-                key: 'primary_chain', dictionary: chain.dictionary
+                chains.updateById(dbchain._id, {
+                  key: 'primary_chain', dictionary: chain.dictionary
+                });
               });
-            });
+        }
+
       });
 }
 
