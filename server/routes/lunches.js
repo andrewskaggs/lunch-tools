@@ -22,7 +22,7 @@ router.get('/update', function(req, res) {
 });
 
 router.get('/generate', function(req, res) {
-  generate(req, res);
+  refreshMarkovChain(req, res, generate(req,res));
 });
 
 router.get('/date/:date', function(req, res) {
@@ -133,7 +133,7 @@ function checkFeed(req, res) {
 
         });
         res.status(200).send(lunches);
-        refreshMarkovChain(req, res);
+        //refreshMarkovChain(req, res);
       }
     });
   } else {
@@ -151,6 +151,7 @@ function getMarkovChain(db) {
 function refreshMarkovChain(req, res, next) {
   getMarkovChain(req.db)
       .on('error', function(err) {
+        console.log(err);
         res.status(500).send(err);
       })
       .on('success', function(dbchain) {
