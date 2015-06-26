@@ -34,7 +34,7 @@ Restful API provided by an [Express](http://expressjs.com/) application. Endpoin
 * `/lunches/{YYYY-MM-DD}/comment`
   * `POST` (name, message) - add a comment. name is optional
 * `/lunches/update`
-  * `GET` - Update new lunches from a RSS feed. Set the URL by changing the server environment variable `LUNCH_TOOLS_RSS`. The lunch date is set by the publication date and the lunch contents is found by looking for a `<p>` tag.
+  * `GET` - Updates database with new lunches from a RSS feed. Set the URL by changing the server environment variable `LUNCH_TOOLS_RSS`. The lunch date is set by the publication date and the lunch contents is found by looking for a `<p>` tag. All new lunches are returned.
 * `/lunches/generate`
   * `GET` - returns a randomly generated lunch menu
 

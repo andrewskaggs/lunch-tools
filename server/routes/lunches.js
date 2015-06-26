@@ -22,7 +22,7 @@ router.get('/update', function(req, res) {
 });
 
 router.get('/generate', function(req, res) {
-  refreshMarkovChain(req, res, generate(req,res));
+  generate(req, res);
 });
 
 router.get('/:date', function(req, res) {
@@ -177,7 +177,7 @@ function checkFeed(req, res) {
         res.status(500).send( { message: err } );
       }
       else {
-        var lunches = [];
+        var newLunches = [];
         out.items.forEach(function(item){
           var date = moment(item.published_at).format('YYYY-MM-DD');
           var description = '';
@@ -196,17 +196,19 @@ function checkFeed(req, res) {
             date: date,
             menu: description
           };
-          lunches.push(lunch);
 
           req.db.get('lunches').find({ date: lunch.date },{}, function(err, result) {
             if (result.length === 0) {
               req.db.get('lunches').insert( lunch ,{});
+              newLunches.push(lunch);
             }
           });
 
         });
-        return res.jsonp(lunches);
-        //refreshMarkovChain(req, res);
+        if (newLunches.length > 0) {
+          refreshMarkovChain(req, res);
+        }
+        return res.jsonp(newLunches);
       }
     });
   } else {
@@ -223,33 +225,33 @@ function getMarkovChain(db) {
 function refreshMarkovChain(req, res, next) {
   getMarkovChain(req.db)
       .on('error', function(err) {
-        console.log(err);
         res.status(500).send(err);
       })
       .on('success', function(dbchain) {
-        if(!dbchain) {
-          var nchain = new Markov();
-          chains.insert({
-            key: 'primary_chain',
-            dictionary: nchain.dictionary
-          }).success(function(doc) {
-            return refreshMarkovChain(req, res, next);
+        var chain = new Markov();
+        req.db.get('lunches').find({})
+          .success(function(lunches) {
+            lunches.forEach(function(lunch) {
+              var sanitizedLunch = lunch.menu.replace(new RegExp("[\.\$]"), '');
+              chain.addText(sanitizedLunch);
+            });
+            console.log(chain);
+            req.db.get('lunch_markov_chains').findAndModify(
+              { key: 'primary_chain'},
+              { $set: { key: 'primary_chain', dictionary: chain.dictionary }},
+              { upsert: true},
+              function(err, result) {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log(result);
+                  if (next)
+                    return next;
+                }
+              }
+            );
           });
-        } else {
-          var chain = new Markov();
-
-          req.db.get('lunches')
-              .find({})
-              .success(function(lunches) {
-                lunches.forEach(function(lunch) { chain.addText(lunch.menu); });
-
-                chains.updateById(dbchain._id, {
-                  key: 'primary_chain', dictionary: chain.dictionary
-                });
-              });
-        }
-
-      });
+        });
 }
 
 function generate(req, res, next) {
@@ -258,9 +260,12 @@ function generate(req, res, next) {
         var chain = new Markov();
         chain.dictionary = dbchain.dictionary;
         var generatedMenu = chain.sentence();
-
-        res.status(200).send(generatedMenu);
+        res.jsonp({ menu: generatedMenu});
       })
+      .on('error', function(err) {
+        console.log(err);
+        res.sendStatus(500);
+      });
 }
 
 module.exports = router;
