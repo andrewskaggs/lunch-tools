@@ -5,14 +5,14 @@ var moment = require('moment');
 var Markov = require('blather');
 
 router.get('/', function(req, res) {
-  var collection = req.db.get('lunches');
-  collection.find({},{},
+  req.db.get('lunches').find({},
+    {fields: { _id:0, date:1, menu:1 }},
     function(err, result) {
-      if (err === null) {
-        res.send(result);
+      if (err == null) {
+        return res.jsonp(result);
       } else {
         console.log(err);
-        res.status(500).send(err);
+        return res.sendStatus(500);
       }
     });
 });
@@ -25,72 +25,145 @@ router.get('/generate', function(req, res) {
   refreshMarkovChain(req, res, generate(req,res));
 });
 
-router.get('/date/:date', function(req, res) {
-  var date = moment(req.params.date).format('YYYY-MM-DD');
-  var collection = req.db.get('lunches');
-  collection.find({ date: date},{}, function(err, result) {
-    res.send(result);
+router.get('/:date', function(req, res) {
+  var targetDate = moment(req.params.date).format('YYYY-MM-DD');
+  req.db.get('lunches').find({ date: targetDate},
+    { fields: {_id: 0}},
+    function(err, result) {
+    if (result.length > 0) {
+      return res.jsonp(result);
+    } else {
+      return res.sendStatus(404);
+    }
   });
 });
 
-router.get('/:id', function(req, res) {
-  var collection = req.db.get('lunches');
-  collection.find({ _id: req.params.id},{},
+router.put('/:date', function(req, res) {
+  var targetDate = moment(req.params.date).format('YYYY-MM-DD');
+
+  if (req.body.menu == null) {
+    return res.status(400).send({ message: "menu field is required"});
+  }
+
+  req.db.get('lunches').update({date: targetDate},
+    { $set: { menu: req.body.menu } },
     function(err, result) {
-      if (err === null) {
-        res.send(result);
-      }
-      else {
+      if (err != null) {
         console.log(err);
-        res.status(500).send(err);
+        return res.sendStatus(500);
       }
+      if (result == 0) {
+        return res.sendStatus(404);
+      }
+      return res.sendStatus(204);
     });
 });
 
 router.post('/', function(req, res) {
-  if (req.body._id) {
-    res.status(400).send( { message: '\'_id\' field is not allowed. Use PUT for updates' } );
-  }
-
   if (!req.body.date) {
-    res.status(400).send( { message: 'date field is required' } );
+    return res.status(400).send( { message: 'date field is required' } );
   }
-
   if (!req.body.menu) {
-    res.status(400).send( { message: 'menu field is required' } );
+    return res.status(400).send( { message: 'menu field is required' } );
   }
 
-  req.db.get('lunches').insert(req.body,
+  var newLunch = {
+    date: moment(req.body.date).format('YYYY-MM-DD'),
+    menu: req.body.menu
+  }
+
+  req.db.get('lunches').find({date: newLunch.date}, {},
     function(err, result) {
-      if (err === null) {
-        res.send();
-      } else {
+      if (err != null) {
         console.log(err);
-        res.status(500).send(err);
+        return res.sendStatus(500);
       }
+      if (result.length != 0) {
+        return res.status(400).send( { message: 'duplicate date' } );
+      }
+      req.db.get('lunches').insert(newLunch,
+        function(err, result) {
+          if (err == null) {
+            return res.sendStatus(204);
+          } else {
+            console.log(err);
+            return res.sendStatus(500);
+          }
+        });
     });
+
 });
 
-router.put('/:id', function(req, res) {
-  req.db.get('lunches').findById(req.params.id,
-    function(err, result){
-      if (err === null) {
-        update(result, req, res);
-      } else {
-        res.status(400).send();
+router.post('/:date/rate', function(req, res) {
+  var targetDate = moment(req.params.date).format('YYYY-MM-DD');
+
+  if (!req.body.rating || (parseInt(req.body.rating) != -1 && parseInt(req.body.rating)!= 1)) {
+    return res.status(400).send( { message: 'rating must be either -1 or 1' } );
+  }
+
+  var newRating = {
+    date: moment().format(),
+    ip: req.ip,
+    rating: parseInt(req.body.rating),
+    type: "UpDownVote"
+  }
+
+  req.db.get('lunches').findAndModify({ date: targetDate},
+    {$push: { ratings: newRating }},
+    function(err, result) {
+      if (err != null) {
+        console.log(err);
+        return res.sendStatus(500);
       }
-    });
+      if (result == null) {
+        return res.sendStatus(404);
+      }
+      return res.sendStatus(204);
+  });
+
 });
 
-router.delete('/:id', function(req, res) {
-  req.db.get('lunches').removeById(req.params.id,
+router.post('/:date/comment', function(req, res) {
+  var targetDate = moment(req.params.date).format('YYYY-MM-DD');
+
+  if (!req.body.message) {
+    return res.status(400).send( { message: 'message field is required' } );
+  }
+
+  var newComment = {
+    date: moment().format(),
+    ip: req.ip,
+    message: req.body.message,
+    name: req.body.name
+  }
+
+  req.db.get('lunches').findAndModify({ date: targetDate},
+    {$push: { comments: newComment }},
     function(err, result) {
-      if (err === null) {
-        res.status(204).send();
-      } else {
+      if (err != null) {
         console.log(err);
-        res.status(500).send(err);
+        return res.sendStatus(500);
       }
+      if (result == null) {
+        return res.sendStatus(404);
+      }
+      return res.sendStatus(204);
+  });
+
+});
+
+router.delete('/:date', function(req, res) {
+  var targetDate = moment(req.params.date).format('YYYY-MM-DD');
+  req.db.get('lunches').remove({date: targetDate},
+    function(err, result) {
+      if (err != null) {
+        console.log(err);
+        return res.sendStatus(500);
+      }
+      if (result == 0) {
+        return res.sendStatus(404);
+      }
+      return res.sendStatus(204);
     });
 });
 
@@ -101,7 +174,7 @@ function checkFeed(req, res) {
     parser.parseURL(rssAddress, options, function(err, out){
       if (err) {
         console.log(err);
-        res.status(500).send(err);
+        res.status(500).send( { message: err } );
       }
       else {
         var lunches = [];
@@ -132,14 +205,13 @@ function checkFeed(req, res) {
           });
 
         });
-        res.status(200).send(lunches);
+        return res.jsonp(lunches);
         //refreshMarkovChain(req, res);
       }
     });
   } else {
-    var errorMessage = 'LUNCH_TOOLS_RSS variable not found';
-    console.log(errorMessage);
-    res.status(500).send(errorMessage);
+    console.log('LUNCH_TOOLS_RSS variable not found');
+    return res.sendStatus(500);
   }
 }
 
@@ -189,24 +261,6 @@ function generate(req, res, next) {
 
         res.status(200).send(generatedMenu);
       })
-}
-
-function update(lunch, req, res) {
-  if (req.body.date)
-    lunch.date = req.body.date;
-
-  if (req.body.menu)
-    lunch.menu = req.body.menu;
-
-  req.db.get('lunches').updateById(lunch._id, lunch,
-    function(err, result) {
-      if (err === null) {
-        res.send();
-      } else {
-        console.log(err);
-        res.status(500).send(err);
-      }
-    });
 }
 
 module.exports = router;
