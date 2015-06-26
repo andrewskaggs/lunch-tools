@@ -38,7 +38,7 @@ Restful API provided by an [Express](http://expressjs.com/) application. Endpoin
 * `/lunches/generate`
   * `GET` - returns a randomly generated lunch menu
 
-All `GET` endpoints support JSONP using the callback query string param `callback`
+All `GET` endpoints support JSONP when using the query string param `callback`
 
 ## Development
 
