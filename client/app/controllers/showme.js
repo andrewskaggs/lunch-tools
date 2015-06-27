@@ -2,8 +2,8 @@
 
 var controllers = angular.module('lunchControllers');
 
-controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies', '$routeParams', '$location',
-  function($scope, $http, $q, $cookies, $routeParams, $location) {
+controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies', '$routeParams', '$location', 'imageService',
+  function($scope, $http, $q, $cookies, $routeParams, $location, imageService) {
 
     var dateFormat = 'YYYY-MM-DD';
     var cookieName = 'lunchtools.showme.settings';
@@ -51,7 +51,7 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
             } else {
               $scope.lunch.translation = lunch.menu;
             }
-            $scope.getImage(lunch.menu).then($scope.setImage, $scope.errorHandler);
+            imageService.getRandomMenuImageUrl(lunch.menu).then($scope.setImage, $scope.errorHandler);
           }
         }, $scope.errorHandler);
     };
@@ -71,35 +71,9 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
               if (data) {
                 console.log(JSON.stringify(data));
               }
-              $scope.errorHandler('Error loading menus');
+              errorHandler('Error loading menus');
             }
           });
-      });
-    };
-
-    $scope.getImage = function(menu) {
-      return $q(function(resolve, errorHandler) {
-        var firstMenuItem = $scope.lunch.menu.split(';')[0];
-        var safeSearch = 'off';
-        if ($scope.settings.safeSearch) {
-          safeSearch = 'active';
-        }
-        $http.jsonp('http://ajax.googleapis.com/ajax/services/search/images', {
-          method: 'GET',
-          params: {v: '1.0', q: firstMenuItem, callback: 'JSON_CALLBACK', safe: safeSearch, rsz: '5' }
-        }).success(function(data, status, headers, config) {
-          if (data.responseData.results.length > 0) {
-            var imageNumber = Math.floor((Math.random() * 5) );
-            if (data.responseData.results.length < imageNumber) {
-              imageNumber = 0;
-            }
-            resolve(data.responseData.results[imageNumber].unescapedUrl);
-          } else {
-            $scope.errorHandler('Error loading image');
-          }
-        }).error( function(data, status, headers, config) {
-          $scope.errorHandler('Error loading image');
-        });
       });
     };
 
@@ -116,13 +90,13 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
                 resolve(data.result);
               } else {
                 console.log(JSON.stringify(data));
-                $scope.errorHandler('Error Loading Translation');
+                errorHandler('Error Loading Translation');
               }
                 resolve(data.result);
             }).
             error(function(data, status, headers, config) {
               console.log(status)
-              $scope.errorHandler('Error Loading Translation');
+              errorHandler('Error Loading Translation');
             });
         } else {
           resolve(menu);

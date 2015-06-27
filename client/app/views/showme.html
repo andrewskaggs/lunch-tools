@@ -1,4 +1,4 @@
-<div class="row" ng-if="settings.advanced" style="text-align: center">
+<div class="row" style="text-align: center">
   <div style="position:relative">
     <h2>Show Me<span ng-if="settings.translate"> Redneck</span> Lunch</h2>
     <div style='position:absolute;right:0;top:0' ng-if="settings.advanced">
@@ -26,7 +26,7 @@
         <img ng-src="{{ lunch.image }}" class="img-responsive"><br/>
       </div>
       <div ng-if="!lunch.image">
-        <i class="fa fa-question-circle fa-5x" ng-click="nextDay()"></i>
+        <i class="fa fa-question-circle fa-5x"></i>
       </div>
     </div>
   </div>

@@ -1,0 +1,26 @@
+<div class="row"><h2>Generate Random Lunch</h2></div>
+
+<div class="row">
+  <div class="text-info bg-info lunch-alert" ng-if="info"><i class="fa fa-info-circle fa-lg"></i>{{ info }}</div>
+  <div class="text-danger bg-danger lunch-alert" ng-if="error"><i class="fa fa-warning fa-lg"></i>{{ error }}</div>
+</div>
+
+<div class="row generate-row">
+  <div ng-bind-html="menu">
+  </div>
+</div>
+
+<div class="row generate-row col-xs-12 clearfix">
+  <p ng-if="image">
+    <img ng-src="{{ image }}" class="img-responsive"><br/>
+  </p>
+  <p ng-if="!image">
+    <i class="fa fa-question-circle fa-5x"></i>
+  </p>
+</div>
+
+<div class="row generate-row">
+  <div>
+    <a role="button" class="btn btn-default" ng-click="generate();"><i class="fa fa-random fa-fw fa-3x"></i></a>
+  </div>
+</div>
