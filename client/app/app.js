@@ -15,11 +15,12 @@ lunchApp.config(['$routeProvider', '$locationProvider',
       .when('/', { redirectTo: '/showme' })
       .when('/menus', {templateUrl: 'views/menus.html', controller: 'menusController'})
       .when('/showme', {templateUrl: 'views/showme.html', controller: 'showMeController'})
+      .when('/showme/:date', {templateUrl: 'views/showme.html', controller: 'showMeController', reloadOnSearch: false})
       .when('/statistics', {templateUrl: 'views/statistics.html', controller: 'statisticsController'})
       .when('/translations', {templateUrl: 'views/translations.html', controller: 'translationsController'})
       .otherwise( { redirectTo: '/' });
 
-    $locationProvider.html5Mode(false).hashPrefix('!');
+    $locationProvider.html5Mode(false).hashPrefix('');
   }
 ]);
 

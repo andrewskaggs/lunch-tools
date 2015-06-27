@@ -94,7 +94,7 @@ router.post('/', function(req, res) {
 
 });
 
-router.post('/:date/rate', function(req, res) {
+router.post('/:date/ratings', function(req, res) {
   var targetDate = moment(req.params.date).format('YYYY-MM-DD');
 
   if (!req.body.rating || (parseInt(req.body.rating) != -1 && parseInt(req.body.rating)!= 1)) {
@@ -123,7 +123,7 @@ router.post('/:date/rate', function(req, res) {
 
 });
 
-router.post('/:date/comment', function(req, res) {
+router.post('/:date/comments', function(req, res) {
   var targetDate = moment(req.params.date).format('YYYY-MM-DD');
 
   if (!req.body.message) {
@@ -136,6 +136,9 @@ router.post('/:date/comment', function(req, res) {
     message: req.body.message,
     name: req.body.name
   }
+
+  if (newComment.name == null || newComment == "")
+    newComment.name = "Anonymous";
 
   req.db.get('lunches').findAndModify({ date: targetDate},
     {$push: { comments: newComment }},

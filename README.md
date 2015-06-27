@@ -29,9 +29,9 @@ Restful API provided by an [Express](http://expressjs.com/) application. Endpoin
   * `GET` - Lunch details including ratings and comments
   * `PUT` (menu) - update existing lunch
   * `DELETE`
-* `/lunches/{YYYY-MM-DD}/rate`
+* `/lunches/{YYYY-MM-DD}/ratings`
   * `POST` (rating) - add an Up Vote/Down Vote style rating (-1 or 1)
-* `/lunches/{YYYY-MM-DD}/comment`
+* `/lunches/{YYYY-MM-DD}/comments`
   * `POST` (name, message) - add a comment. name is optional
 * `/lunches/update`
   * `GET` - Updates database with new lunches from a RSS feed. Set the URL by changing the server environment variable `LUNCH_TOOLS_RSS`. The lunch date is set by the publication date and the lunch contents is found by looking for a `<p>` tag. All new lunches are returned.

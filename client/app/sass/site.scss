@@ -24,6 +24,10 @@ h2 {
   vertical-align: center;
 }
 
+.navbar {
+  margin-bottom: 5px;
+}
+
 .navbar-brand {
   padding: 5px;
 }
@@ -93,10 +97,21 @@ button.navbar-toggle {
   @media screen and (max-width: $screen-xs-max) {
     margin-top: 10px;
     margin-bottom: 10px;
+    display: none;
   }
   @media screen and (min-width: $screen-sm-min) {
     margin-top: 150px;
   }
+}
+
+.showme-button-left {
+  @extend .showme-button;
+  margin-right: 25px;
+}
+
+.showme-button-right {
+  @extend .showme-button;
+  margin-left: 25px;
 }
 
 .showme {
@@ -108,7 +123,6 @@ button.navbar-toggle {
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;
-  margin-bottom: 10px;
   @media screen and (max-width: $screen-xs-max) {
     max-width: 300px;
     max-height: 300px;
@@ -119,8 +133,53 @@ button.navbar-toggle {
   }
 }
 
-.showme-settings {
+.showme-rating {
   text-align: center;
+}
+
+.showme-comments {
+  text-align: left;
+  margin-top: 25px;
+}
+
+.showme-comments-title{
+  font-weight: bold;
+  font-size: 16;
+}
+
+.showme-comment-body {
+  margin-top: 15px;
+}
+
+.showme-comment-meta {
+  text-align: right;
+  font-style: italic;
+}
+
+.showme-comments textarea {
+  width: 100%;
+  resize: none;
+}
+
+.showme-comments-button {
+  text-align: right;
+}
+
+.showme-comments-button-activeUp {
+  color: blue;
+}
+
+.showme-comments-button-activeDown {
+  color: red;
+}
+
+
+.showme-comments-form {
+  margin-top: 15px;
+}
+
+.showme-settings {
+  float: right;
 }
 
 .toggle {

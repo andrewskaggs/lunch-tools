@@ -1,4 +1,14 @@
-<div class="row"><h2>Show Me<span ng-if="settings.translate"> Real</span> Lunch</h2></div>
+<div class="row" ng-if="settings.advanced">
+  <div class="pull-right">
+    <a class="btn btn-default pull-right" role="button" data-toggle="modal" data-target="#settingsModal"><i class="fa fa-gear fa-fw fa-lg"></i></a>
+  </div>
+</div>
+
+<div class="row">
+  <div style="text-align:center">
+    <h2 style="display:inline-block;vertical-align:baseline;text-align:center;">Show Me<span ng-if="settings.translate"> Redneck</span> Lunch</h2>
+  </div>
+</div>
 
 <div class="row">
   <div class="text-info bg-info lunch-alert" ng-if="info"><i class="fa fa-info-circle fa-lg"></i>{{ info }}</div>
@@ -16,7 +26,7 @@
     <div class="showme">
       <p ng-bind-html="lunch.translation"></p>
       <div ng-if="lunch.image">
-        <img ng-src="{{ lunch.image }}" ng-click="nextDay()" class="img-responsive"><br/>
+        <img ng-src="{{ lunch.image }}" class="img-responsive"><br/>
       </div>
       <div ng-if="!lunch.image">
         <i class="fa fa-question-circle fa-5x" ng-click="nextDay()"></i>
@@ -24,17 +34,62 @@
     </div>
   </div>
   <div class="showme-button col-xs-6 col-sm-2 col-sm-pull-8">
-    <a class="btn btn-default" role="button" ng-click="previousDay()"><i class="fa fa-chevron-left fa-2x"></i></a>
+    <a class="btn btn-default" role="button" ng-click="previousDay()"><i class="fa fa-chevron-left fa-3x"></i></a>
   </div>
   <div class="showme-button col-xs-6 col-sm-2">
-    <a class="btn btn-default" role="button" ng-click="nextDay()"><i class="fa fa-chevron-right fa-2x"></i></a>
+    <a class="btn btn-default" role="button" ng-click="nextDay()"><i class="fa fa-chevron-right fa-3x"></i></a>
   </div>
 </div>
 
-<div class="row">
-  <div class="showme-settings">
-    <lunch-switch field="settings.translate">Translate Lunch</lunch-switch>
-    <lunch-switch field="settings.skipWeekends">Skip Weekends</lunch-switch>
-    <lunch-switch field="settings.safeSearch">Safe Search</lunch-switch>
+<div class="row" ng-show="lunch">
+  <div class="showme-rating">
+    <a class="btn btn-default" role="button" id="upVoteButton" ng-click="voteUp()" ng-disabled="currentRating != null" ng-class="{ 'showme-comments-button-activeUp' : currentRating == 1 }"><i class="fa fa-thumbs-o-up fa-3x"></i></a>
+    <a class="btn btn-default" role="button" id="downVoteButton" ng-click="voteDown()" ng-disabled="currentRating != null" ng-class="{ 'showme-comments-button-activeDown' : currentRating == -1 }" style="margin-left: 50px"><i class="fa fa-thumbs-o-down fa-3x"></i></a>
+  </div>
+</div>
+
+<div class="row" ng-show="lunch">
+  <div class="showme-comments col-xs-12 col-sm-8 col-sm-push-2">
+    <div class="showme-comments-title">
+      Comments
+    </div>
+    <div ng-repeat="comment in lunch.comments | orderBy : 'date'">
+      <div class="showme-comment-body">{{comment.message}}</div>
+      <div class="showme-comment-meta">{{comment.name}} - {{comment.date | date: 'MMM d, y hh:mm:ss a'}}</div>
+    </div>
+    <div class="showme-comments-form">
+      <div>
+        Name (Optional)
+      </div>
+      <textarea id="comment-name" rows="1" ng-model="commentName"/>
+      <br>
+      <div>
+        Comment
+      </div>
+      <textarea id="comment-message" rows="6" ng-model="commentMessage"/>
+      <br>
+      <br>
+      <div class="showme-comments-button">
+        <a class="btn btn-default" role="button" ng-click="comment()"><i class="fa fa-comment fa-fw"></i>&nbsp;Submit</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="deleteModalLabel">Settings</h4>
+      </div>
+      <div class="modal-body">
+        <lunch-switch field="settings.translate">Translate Lunch</lunch-switch><br/>
+        <lunch-switch field="settings.skipWeekends">Skip Weekends</lunch-switch><br/>
+        <lunch-switch field="settings.safeSearch">Safe Search</lunch-switch>
+      </div>
+      <div class="modal-footer">
+        <a role="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-check fa-fw"></i>OK</a>
+      </div>
+    </div>
   </div>
 </div>

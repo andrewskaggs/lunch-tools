@@ -19,7 +19,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="menu in menus | orderBy: 'date'">
+      <tr ng-repeat="menu in menus | orderBy: 'date' : true">
         <td>{{ menu.date | date : 'MM/dd/yyyy' }}</td>
         <td colspan=2 ng-bind-html="menu.menu"></td>
       </tr>
