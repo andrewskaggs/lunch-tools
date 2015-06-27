@@ -14,6 +14,7 @@ lunchApp.config(['$routeProvider', '$locationProvider',
   function($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', { redirectTo: '/showme' })
+      .when('/analytics', {templateUrl: 'views/analytics.html', controller: 'analyticsController'})
       .when('/menus', {templateUrl: 'views/menus.html', controller: 'menusController'})
       .when('/showme', {templateUrl: 'views/showme.html', controller: 'showMeController'})
       .when('/generate', {templateUrl: 'views/generate.html', controller: 'generateController'})
