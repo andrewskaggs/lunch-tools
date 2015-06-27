@@ -1,12 +1,9 @@
-<div class="row" ng-if="settings.advanced">
-  <div class="pull-right">
-    <a class="btn btn-default pull-right" role="button" data-toggle="modal" data-target="#settingsModal"><i class="fa fa-gear fa-fw fa-lg"></i></a>
-  </div>
-</div>
-
-<div class="row">
-  <div style="text-align:center">
-    <h2 style="display:inline-block;vertical-align:baseline;text-align:center;">Show Me<span ng-if="settings.translate"> Redneck</span> Lunch</h2>
+<div class="row" ng-if="settings.advanced" style="text-align: center">
+  <div style="position:relative">
+    <h2>Show Me<span ng-if="settings.translate"> Redneck</span> Lunch</h2>
+    <div style='position:absolute;right:0;top:0' ng-if="settings.advanced">
+      <a class="btn btn-default" role="button" data-toggle="modal" data-target="#settingsModal"><i class="fa fa-gear fa-fw fa-lg"></i></a>
+    </div>
   </div>
 </div>
 
