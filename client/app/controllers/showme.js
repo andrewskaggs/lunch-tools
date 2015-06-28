@@ -7,7 +7,6 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
 
     var dateFormat = 'YYYY-MM-DD';
     var cookieName = 'lunchtools.showme.settings';
-    var ratingsCookieName = 'lunchtools.showme.ratings';
     var ratingSource = "LunchTools.ShowMe";
 
     $scope.initialize = function() {
@@ -137,12 +136,13 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
     };
 
     $scope.loadRatings = function() {
-      var ratings = $cookies.getObject(ratingsCookieName);
-
-      if (!ratings) {
+      // these should really be server side, but until lunch tools has users...
+      var ratings;
+      if (localStorage.ratings) {
+        ratings = JSON.parse(localStorage.ratings);
+      } else {
         ratings = [];
       }
-
       return ratings;
     };
 
@@ -154,9 +154,7 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
       if (!_.findWhere($scope.ratings, {date: date})) {
         $scope.lunch.rated = true;
         $scope.ratings.push(newRating);
-        $cookies.putObject(ratingsCookieName, $scope.ratings, {
-          expires: moment().add(10,'years').toDate()
-        });
+        localStorage.ratings = JSON.stringify($scope.ratings);
         $scope.checkRating();
       }
     };
