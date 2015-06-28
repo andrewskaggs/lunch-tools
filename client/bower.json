@@ -23,6 +23,8 @@
     "bootstrap-sass": "3.3.4",
     "angular-cookies": "1.4.0",
     "angular-touch": "1.4.0",
-    "underscore": "~1.8.3"
+    "underscore": "~1.8.3",
+    "pickadate": "~3.5.6",
+    "ng-pickadate": "~0.2.0"
   }
 }

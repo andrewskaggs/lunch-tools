@@ -20,6 +20,15 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
       $scope.info = null;
       $scope.currentRating = null;
       $scope.notFound = false;
+      $scope.pickerDate = null;
+      $scope.pickerOptions = {
+        clear: '',
+        selectYears: 4,
+        selectMonths: true,
+        onClose: function(){
+          $(document.activeElement).blur()
+        }
+      };
 
       if ($routeParams.date) {
         $scope.m = moment($routeParams.date);
@@ -33,6 +42,8 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
       } else {
         $scope.update($scope.m.format(dateFormat));
       }
+
+      $scope.pickerDate = $scope.m.format();
     };
 
     $scope.update = function(date) {
@@ -218,6 +229,15 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
         $scope.saveSettings($scope.settings);
         $scope.update($scope.m.format(dateFormat));
       }
+    );
+
+    $scope.$watch('pickerDate',
+      function(newValue, oldValue) {
+        if (newValue == null || newValue == oldValue)
+          return;
+        $scope.m = moment(newValue);
+        $scope.update($scope.m.format(dateFormat));
+      }, true
     );
 
     $scope.initialize();

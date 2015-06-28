@@ -108,7 +108,11 @@ services.service('lunchService', [ '$http', '$q',
             .error(function(data, status, headers, config) {
               console.log(status);
               console.log(data);
-              errorHandler('Error saving rating');
+              if (data.message) {
+                errorHandler(data.message);
+              } else {
+                errorHandler('Error saving rating');
+              }
             });
         });
       };
@@ -127,7 +131,11 @@ services.service('lunchService', [ '$http', '$q',
             .error(function(data, status, headers, config) {
               console.log(status);
               console.log(data);
-              errorHandler('Error saving comment');
+              if (data.message) {
+                errorHandler(data.message);
+              } else {
+                errorHandler('Error saving comment');
+              }
             });
         });
       };

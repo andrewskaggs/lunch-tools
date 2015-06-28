@@ -177,8 +177,29 @@ button.navbar-toggle {
   margin-top: 15px;
 }
 
-.showme-settings {
-  float: right;
+.showme-controls {
+  text-align:center;
+}
+
+.showme-controls a {
+  @media screen and (max-width: $screen-xs-max) {
+    margin-left: 8px;
+  }
+  @media screen and (min-width: $screen-sm-min) {
+    margin-left: 25px;
+  }
+}
+
+.showme-controls p {
+  display: inline;
+}
+
+.showme-controls i {
+  pointer-events: none;
+}
+
+.showme-controls-first {
+  margin-left: 0px;
 }
 
 .generate-row {
@@ -211,7 +232,6 @@ button.navbar-toggle {
   font-size: 28px;
   margin-top: 30px;
 }
-
 
 .kitchen button:active {
   color: red;

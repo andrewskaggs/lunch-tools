@@ -7,7 +7,8 @@ var lunchApp = angular.module('lunchApp', [
   'ngTouch',
   'lunchControllers',
   'lunchDirectives',
-  'lunchServices'
+  'lunchServices',
+  'pickadate'
 ]);
 
 lunchApp.config(['$routeProvider', '$locationProvider',

@@ -1,9 +1,6 @@
-<div class="row" style="text-align: center">
-  <div style="position:relative">
+<div class="row showme">
+  <div>
     <h2>Show Me<span ng-if="settings.translate"> Redneck</span> Lunch</h2>
-    <div style='position:absolute;right:0;top:0' ng-if="settings.advanced">
-      <a class="btn btn-default" role="button" data-toggle="modal" data-target="#settingsModal"><i class="fa fa-gear fa-fw fa-lg"></i></a>
-    </div>
   </div>
 </div>
 
@@ -42,10 +39,14 @@
   </div>
 </div>
 
-<div class="row" ng-show="lunch">
-  <div class="showme-rating">
-    <a class="btn btn-default" role="button" id="upVoteButton" ng-click="vote(1)" ng-disabled="currentRating != null" ng-class="{ 'showme-comments-button-activeUp' : currentRating == 1 }"><i class="fa fa-thumbs-o-up fa-3x"></i></a>
-    <a class="btn btn-default" role="button" id="downVoteButton" ng-click="vote(-1)" ng-disabled="currentRating != null" ng-class="{ 'showme-comments-button-activeDown' : currentRating == -1 }" style="margin-left: 50px"><i class="fa fa-thumbs-o-down fa-3x"></i></a>
+<div class="row">
+  <div class="showme-controls">
+    <a class="btn btn-default showme-controls-first" role="button" pick-a-date="pickerDate" pick-a-date-options="pickerOptions"><i class="fa fa-calendar fa-3x"></i></a>
+    <p ng-show="lunch">
+      <a class="btn btn-default" role="button" ng-click="vote(1)" ng-disabled="currentRating != null" ng-class="{ 'showme-comments-button-activeUp' : currentRating == 1 }"><i class="fa fa-thumbs-o-up fa-3x"></i></a>
+      <a class="btn btn-default" role="button" ng-click="vote(-1)" ng-disabled="currentRating != null" ng-class="{ 'showme-comments-button-activeDown' : currentRating == -1 }"><i class="fa fa-thumbs-o-down fa-3x"></i></a>
+    </p>
+    <a class="btn btn-default" role="button" data-toggle="modal" data-target="#settingsModal" ng-show="settings.advanced"><i class="fa fa-gear fa-3x"></i></a>
   </div>
 </div>
 
@@ -60,7 +61,7 @@
     </div>
     <div class="showme-comments-form">
       <div>
-        Name (Optional)
+        Name
       </div>
       <textarea id="comment-name" rows="1" ng-model="commentName"/>
       <br>
