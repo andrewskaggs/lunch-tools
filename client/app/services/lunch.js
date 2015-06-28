@@ -24,6 +24,20 @@ services.service('lunchService', [ '$http', '$q',
         });
       };
 
+      this.getAll = function() {
+        return $q(function(resolve, reject) {
+          $http.get('lunches')
+            .success( function(data, status, headers, config) {
+              resolve(data);
+            })
+            .error( function(data, status, headers, config) {
+                console.log(status);
+                console.log(data);
+                reject('Error loading lunches');
+            });
+        });
+      };
+
       this.getGenerated = function() {
         return $q(function(resolve, errorHandler) {
           $http.get('lunches/generate')
@@ -114,6 +128,20 @@ services.service('lunchService', [ '$http', '$q',
               console.log(status);
               console.log(data);
               errorHandler('Error saving comment');
+            });
+        });
+      };
+
+      this.update = function() {
+        return $q(function(resolve, reject) {
+          $http.get('lunches/update')
+            .success( function(data, status, headers, config) {
+              resolve(data);
+            })
+            .error( function(data, status, headers, config) {
+                console.log(status);
+                console.log(data);
+                reject('Error reading RSS feed');
             });
         });
       };

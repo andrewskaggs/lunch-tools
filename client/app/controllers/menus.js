@@ -2,8 +2,8 @@
 
 var controllers = angular.module('lunchControllers');
 
-controllers.controller('menusController', [ '$scope', '$http',
-  function($scope, $http) {
+controllers.controller('menusController', [ '$scope', 'lunchService',
+  function($scope, lunchService) {
 
     $scope.initialize = function() {
       $scope.updating = false;
@@ -14,37 +14,26 @@ controllers.controller('menusController', [ '$scope', '$http',
     }
 
     $scope.refreshLunches = function() {
-      $http.get('lunches')
-        .success( function(data, status, headers, config) {
-          $scope.error = null;
-          $scope.menus = data;
-        })
-        .error( function(data, status, headers, config) {
-          $scope.error = 'Error loading menus';
-          console.log('HTTP ' + status.toString());
-          if (data) {
-            console.log(JSON.stringify(data));
-          }
-        });
+      lunchService.getAll()
+        .then(function(menus) { $scope.menus = menus }, $scope.errorHandler);
     };
 
     $scope.updateRSS = function() {
       $scope.updating = true;
-      $http.get('lunches/update')
-        .success( function(data, status, headers, config) {
-          $scope.error = null;
+      lunchService.update().then(function(newMenus) {
           $scope.updating = false;
-          $scope.info = "Menus Updated";
-          $scope.refreshLunches();
-        })
-        .error( function(data, status, headers, config) {
-          $scope.updating = false;
-          $scope.error = 'Error loading RSS feed';
-          console.log('HTTP ' + status.toString());
-          if (data) {
-            console.log(JSON.stringify(data));
+          if (newMenus.length > 0) {
+            $scope.info = newMenus.length.toString() + " new menus found";
+            $scope.refreshLunches();
+          } else {
+            $scope.info = "No new lunches found";
           }
-        });
+      }, $scope.errorHandler);
+    };
+
+    $scope.errorHandler = function(errorMessage) {
+      $scope.updating = false;
+      $scope.error = errorMessage;
     };
 
     $scope.initialize();
