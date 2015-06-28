@@ -27,10 +27,10 @@ router.get('/generate', function(req, res) {
 
 router.get('/:date', function(req, res) {
   var targetDate = moment(req.params.date).format('YYYY-MM-DD');
-  req.db.get('lunches').find({ date: targetDate},
+  req.db.get('lunches').findOne({ date: targetDate},
     { fields: {_id: 0}},
     function(err, result) {
-    if (result.length > 0) {
+    if (result) {
       return res.jsonp(result);
     } else {
       return res.sendStatus(404);
@@ -105,8 +105,12 @@ router.post('/:date/ratings', function(req, res) {
     date: moment().format(),
     ip: req.ip,
     rating: parseInt(req.body.rating),
-    type: "UpDownVote"
+    type: 'UpDownVote',
+    source: req.body.source
   }
+
+  if (newRating.source == null || newRating.source == "")
+    newRating.source = "API";
 
   req.db.get('lunches').findAndModify({ date: targetDate},
     {$push: { ratings: newRating }},
@@ -238,7 +242,6 @@ function refreshMarkovChain(req, res, next) {
               var sanitizedLunch = lunch.menu.replace(new RegExp("[\.\$]"), '');
               chain.addText(sanitizedLunch);
             });
-            console.log(chain);
             req.db.get('lunch_markov_chains').findAndModify(
               { key: 'primary_chain'},
               { $set: { key: 'primary_chain', dictionary: chain.dictionary }},

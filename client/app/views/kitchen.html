@@ -1,0 +1,25 @@
+<div class="row">
+  <h2>How Was Lunch Today?</h2>
+</div>
+
+<div class="row" ng-show="lunch">
+  <div class="text-info bg-info lunch-alert" ng-if="info"><i class="fa fa-info-circle fa-lg"></i>{{ info }}</div>
+  <div class="text-danger bg-danger lunch-alert" ng-if="error"><i class="fa fa-warning fa-lg"></i>{{ error }}</div>
+</div>
+
+<div class="row kitchen" ng-show="!lunch">
+  <p>
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </p>
+</div>
+
+<div class="row kitchen-menu" ng-show="lunch">
+  <p ng-bind-html="lunch.menu"></p>
+</div>
+
+<div class="row kitchen" ng-show="lunch">
+  <div class="showme-rating">
+    <a class="btn btn-default" role="button" id="upVoteButton" ng-click="vote(1)" ng-disabled="currentRating != null"><i class="fa fa-thumbs-o-up fa-5x"></i></a>
+    <a class="btn btn-default" role="button" id="downVoteButton" ng-click="vote(-1)" ng-disabled="currentRating != null" style="margin-left: 50px"><i class="fa fa-thumbs-o-down fa-5x"></i></a>
+  </div>
+</div>

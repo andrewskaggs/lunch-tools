@@ -2,12 +2,13 @@
 
 var controllers = angular.module('lunchControllers');
 
-controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies', '$routeParams', '$location', 'imageService',
-  function($scope, $http, $q, $cookies, $routeParams, $location, imageService) {
+controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams', '$location', 'lunchService',
+  function($scope, $cookies, $routeParams, $location, lunchService) {
 
     var dateFormat = 'YYYY-MM-DD';
     var cookieName = 'lunchtools.showme.settings';
     var ratingsCookieName = 'lunchtools.showme.ratings';
+    var ratingSource = "LunchTools.ShowMe";
 
     $scope.initialize = function() {
       $scope.settings = $scope.loadSettings();
@@ -18,6 +19,7 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
       $scope.error = null;
       $scope.info = null;
       $scope.currentRating = null;
+      $scope.notFound = false;
 
       if ($routeParams.date) {
         $scope.m = moment($routeParams.date);
@@ -38,78 +40,41 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
       $scope.error = null;
       $scope.info = null;
       $scope.currentRating = null;
+      $scope.notFound = false;
 
       // TODO: figure out how to rewrite URL without angular looping
 
-      $scope.getLunch(date)
-        .then(function(lunch) {
-          if (lunch) {
-            $scope.lunch = lunch;
-            $scope.checkRating(date);
-            if ($scope.settings.translate) {
-              $scope.getTranslation(lunch.menu).then($scope.setTranslation, $scope.errorHandler)
-            } else {
-              $scope.lunch.translation = lunch.menu;
-            }
-            imageService.getRandomMenuImageUrl(lunch.menu).then($scope.setImage, $scope.errorHandler);
-          }
-        }, $scope.errorHandler);
+      lunchService.get(date).then($scope.setLunch, $scope.errorHandler);
     };
 
-    $scope.getLunch = function(date) {
-      return $q(function(resolve, errorHandler) {
-        $http.get('lunches/' + date)
-          .success( function(data, status, headers, config) {
-            if (data && data.length > 0) {
-              resolve(data[0]);
-            } else {
-              resolve(null);
-            }
+    $scope.setLunch = function(lunch) {
+      $scope.lunch = lunch;
+      if ($scope.settings.translate) {
+        lunchService.translateMenu($scope.lunch.menu).then(function(translation) {
+            $scope.lunch.translation = translation;
+            $scope.checkRating();
+            return lunchService.getMenuImageUrl($scope.lunch.translation);
           })
-          .error( function(data, status, headers, config) {
-            if (status != 404) {
-              if (data) {
-                console.log(JSON.stringify(data));
-              }
-              errorHandler('Error loading menus');
-            }
-          });
-      });
+          .then($scope.setImage)
+          .catch($scope.errorHandler);
+      } else {
+        lunchService.getMenuImageUrl(lunch.menu).then($scope.setImage, $scope.errorHandler );
+      }
     };
 
     $scope.setImage = function(imageUrl) {
       $scope.lunch.image = imageUrl;
-    }
-
-    $scope.getTranslation = function(menu) {
-      return $q(function(resolve, errorHandler) {
-        if ($scope.settings.translate) {
-          $http.post('translate', {lunch: menu}).
-            success(function(data, status, headers, config) {
-              if (data && data.result) {
-                resolve(data.result);
-              } else {
-                console.log(JSON.stringify(data));
-                errorHandler('Error Loading Translation');
-              }
-                resolve(data.result);
-            }).
-            error(function(data, status, headers, config) {
-              console.log(status)
-              errorHandler('Error Loading Translation');
-            });
-        } else {
-          resolve(menu);
-        }
-      });
-    };
-
-    $scope.setTranslation = function(translation) {
-      $scope.lunch.translation = translation;
     };
 
     $scope.errorHandler = function(errorMessage) {
-      $scope.error = errorMessage;
+      if (errorMessage == null) {
+        errorMessage = "Error";
+      }
+      if (errorMessage.length >2 && errorMessage.substring(0,3) == '404') {
+        $scope.notFound = true;
+      } else {
+        $scope.error = errorMessage;
+      }
     };
 
     $scope.nextDay = function() {
@@ -181,11 +146,12 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
         $cookies.putObject(ratingsCookieName, $scope.ratings, {
           expires: moment().add(10,'years').toDate()
         });
-        $scope.checkRating(date);
+        $scope.checkRating();
       }
     };
 
-    $scope.checkRating = function(date) {
+    $scope.checkRating = function() {
+      var date = $scope.m.format(dateFormat);
       var savedRating = _.findWhere($scope.ratings, {date: date} );
       if (savedRating != null) {
         $scope.currentRating = savedRating.rating;
@@ -206,65 +172,24 @@ controllers.controller('showMeController', [ '$scope', '$http', '$q', '$cookies'
 
     $scope.comment = function() {
       var date = $scope.m.format(dateFormat);
-      var comment = {
-        name: $scope.commentName,
-        message: $scope.commentMessage
-      };
-      $http.post('/lunches/' + date + '/comments', comment)
-        .success(function(data, status, headers, config) {
-          $scope.commentName = '';
-          $scope.commentMessage = '';
-          $http.get('/lunches/' + date)
-            .success(function(data, status, headers, config) {
-              $scope.lunch.comments = data[0].comments;
-            })
-            .error(function(data, status, headers, config) {
-              console.log(status);
-              console.log(data);
-              $scope.errorHandler('Error refreshing comments. Try reloading the page.')
-            });
+      lunchService.comment(date, $scope.commentName, $scope.commentMessage)
+        .then(function() {
+          $scope.commentName = null;
+          $scope.commentMessage = null;
+          return lunchService.get(date);
         })
-        .error(function(data, status, headers, config) {
-          if (status == 400) {
-            $scope.errorHandler(data.message);
-          } else {
-            console.log(status);
-            console.log(data);
-            $scope.errorHandler('Error saving comment');
-          }
-        });
+        .then(function(lunch) {
+          $scope.lunch.comments = lunch.comments;
+        })
+        .catch($scope.errorHandler);
     };
 
-    $scope.voteUp = function() {
+    $scope.vote = function(rating) {
       var date = $scope.m.format(dateFormat);
-      var rating = {
-        rating: 1
-      };
-      $http.post('/lunches/' + date + '/ratings', rating)
-        .success(function(data, status, headers, config) {
-          $scope.saveRating(date, 1);
-        })
-        .error(function(data, status, headers, config) {
-          console.log(status);
-          console.log(data)
-          $scope.errorHandler('Error Saving Rating');
-        });
-    };
-
-    $scope.voteDown = function() {
-      var date = $scope.m.format(dateFormat);
-      var rating = {
-        rating: -1
-      }
-      $http.post('/lunches/' + date + '/ratings', rating)
-        .success(function(data, status, headers, config) {
-          $scope.saveRating(date, -1);
-        })
-        .error(function(data, status, headers, config) {
-          console.log(status);
-          console.log(data)
-          $scope.errorHandler('Error Saving Rating');
-        });
+      lunchService.rate(date, rating, ratingSource)
+      .then(function() {
+        $scope.saveRating(date, rating);
+      }, $scope.errorHandler);
     };
 
     $scope.$watch('settings.translate',

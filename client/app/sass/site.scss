@@ -201,6 +201,22 @@ button.navbar-toggle {
   }
 }
 
+.kitchen {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.kitchen-menu {
+  text-align: center;
+  font-size: 28px;
+  margin-top: 30px;
+}
+
+
+.kitchen button:active {
+  color: red;
+}
+
 .toggle {
   display: inline-block;
 }

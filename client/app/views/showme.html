@@ -21,12 +21,16 @@
 <div class="row" ng-swipe-left="nextDay()" ng-swipe-right="previousDay()">
   <div class="col-xs-12 col-sm-8 col-sm-push-2">
     <div class="showme">
-      <p ng-bind-html="lunch.translation"></p>
+      <p ng-bind-html="lunch.menu" ng-show="!settings.translate"></p>
+      <p ng-bind-html="lunch.translation" ng-show="settings.translate"></p>
       <div ng-if="lunch.image">
         <img ng-src="{{ lunch.image }}" class="img-responsive"><br/>
       </div>
-      <div ng-if="!lunch.image">
+      <div ng-show="notFound">
         <i class="fa fa-question-circle fa-5x"></i>
+      </div>
+      <div ng-show="!notFound && !lunch.image">
+        <i class="fa fa-spinner fa-pulse fa-5x"></i>
       </div>
     </div>
   </div>
@@ -40,8 +44,8 @@
 
 <div class="row" ng-show="lunch">
   <div class="showme-rating">
-    <a class="btn btn-default" role="button" id="upVoteButton" ng-click="voteUp()" ng-disabled="currentRating != null" ng-class="{ 'showme-comments-button-activeUp' : currentRating == 1 }"><i class="fa fa-thumbs-o-up fa-3x"></i></a>
-    <a class="btn btn-default" role="button" id="downVoteButton" ng-click="voteDown()" ng-disabled="currentRating != null" ng-class="{ 'showme-comments-button-activeDown' : currentRating == -1 }" style="margin-left: 50px"><i class="fa fa-thumbs-o-down fa-3x"></i></a>
+    <a class="btn btn-default" role="button" id="upVoteButton" ng-click="vote(1)" ng-disabled="currentRating != null" ng-class="{ 'showme-comments-button-activeUp' : currentRating == 1 }"><i class="fa fa-thumbs-o-up fa-3x"></i></a>
+    <a class="btn btn-default" role="button" id="downVoteButton" ng-click="vote(-1)" ng-disabled="currentRating != null" ng-class="{ 'showme-comments-button-activeDown' : currentRating == -1 }" style="margin-left: 50px"><i class="fa fa-thumbs-o-down fa-3x"></i></a>
   </div>
 </div>
 

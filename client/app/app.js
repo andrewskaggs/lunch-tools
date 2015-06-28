@@ -15,9 +15,10 @@ lunchApp.config(['$routeProvider', '$locationProvider',
     $routeProvider
       .when('/', { redirectTo: '/showme' })
       .when('/analytics', {templateUrl: 'views/analytics.html', controller: 'analyticsController'})
+      .when('/generate', {templateUrl: 'views/generate.html', controller: 'generateController'})
+      .when('/kitchen', {templateUrl: 'views/kitchen.html', controller: 'kitchenController'})
       .when('/menus', {templateUrl: 'views/menus.html', controller: 'menusController'})
       .when('/showme', {templateUrl: 'views/showme.html', controller: 'showMeController'})
-      .when('/generate', {templateUrl: 'views/generate.html', controller: 'generateController'})
       .when('/showme/:date', {templateUrl: 'views/showme.html', controller: 'showMeController', reloadOnSearch: false})
       .when('/statistics', {templateUrl: 'views/statistics.html', controller: 'statisticsController'})
       .when('/translations', {templateUrl: 'views/translations.html', controller: 'translationsController'})
