@@ -193,7 +193,9 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
     };
 
     $scope.$watch('settings.translate',
-      function() {
+      function(newValue, oldValue) {
+        if (newValue == oldValue)
+          return;
         $scope.saveSettings($scope.settings);
         $scope.update($scope.m.format(dateFormat));
       }
@@ -210,7 +212,9 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
     );
 
     $scope.$watch('settings.safeSearch',
-      function() {
+      function(newValue, oldValue) {
+        if (newValue == oldValue)
+          return;
         $scope.saveSettings($scope.settings);
         $scope.update($scope.m.format(dateFormat));
       }
