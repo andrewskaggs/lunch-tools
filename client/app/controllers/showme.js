@@ -26,7 +26,7 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
         selectYears: 4,
         selectMonths: true,
         onClose: function(){
-          $(document.activeElement).blur()
+          $(document.activeElement).blur(); // hack for picker opening every time tab gets focus
         }
       };
 
@@ -60,10 +60,10 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
 
     $scope.setLunch = function(lunch) {
       $scope.lunch = lunch;
+      $scope.checkRating();
       if ($scope.settings.translate) {
         lunchService.translateMenu($scope.lunch.menu).then(function(translation) {
             $scope.lunch.translation = translation;
-            $scope.checkRating();
             return lunchService.getMenuImageUrl($scope.lunch.translation);
           })
           .then($scope.setImage)

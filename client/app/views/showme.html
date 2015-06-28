@@ -41,7 +41,7 @@
 
 <div class="row">
   <div class="showme-controls">
-    <a class="btn btn-default showme-controls-first" role="button" pick-a-date="pickerDate" pick-a-date-options="pickerOptions"><i class="fa fa-calendar fa-3x"></i></a>
+    <a class="btn btn-default" id="showme-controls-first" role="button" pick-a-date="pickerDate" pick-a-date-options="pickerOptions"><i class="fa fa-calendar fa-3x"></i></a>
     <p ng-show="lunch">
       <a class="btn btn-default" role="button" ng-click="vote(1)" ng-disabled="currentRating != null" ng-class="{ 'showme-comments-button-activeUp' : currentRating == 1 }"><i class="fa fa-thumbs-o-up fa-3x"></i></a>
       <a class="btn btn-default" role="button" ng-click="vote(-1)" ng-disabled="currentRating != null" ng-class="{ 'showme-comments-button-activeDown' : currentRating == -1 }"><i class="fa fa-thumbs-o-down fa-3x"></i></a>
