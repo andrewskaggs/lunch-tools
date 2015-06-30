@@ -6,7 +6,7 @@ var Markov = require('blather');
 
 router.get('/', function(req, res) {
   req.db.get('lunches').find({},
-    {fields: { _id:0, date:1, menu:1 }},
+    {fields: { _id:0, date: 1, menu: 1 }},
     function(err, result) {
       if (err == null) {
         return res.jsonp(result);
@@ -28,15 +28,41 @@ router.get('/generate', function(req, res) {
 router.get('/:date', function(req, res) {
   var targetDate = moment(req.params.date).format('YYYY-MM-DD');
   req.db.get('lunches').findOne({ date: targetDate},
-    { fields: {_id: 0}},
+    { fields: {_id: 0, ratings: 0, comments: 0 }},
     function(err, result) {
-    if (result) {
-      return res.jsonp(result);
+      if (result) {
+        //return res.jsonp(result);
+        appendComments(req,res,result);
+      } else {
+        return res.sendStatus(404);
+      }
+    });
+});
+
+function appendComments(req, res, lunch) {
+  req.db.get('comments').find({date: lunch.date}, function(err, result) {
+    if (err == null) {
+      lunch.comments = result;
+      appendRatings(req,res,lunch);
     } else {
-      return res.sendStatus(404);
+      console.log(err);
+      return res.sendStatus(500);
     }
   });
-});
+}
+
+function appendRatings(req, res, lunch) {
+  return res.jsonp(lunch);
+  req.db.get('ratings').find({date: lunch.date}, function(err, result) {
+    if (err == null) {
+      lunch.ratings = result;
+      return res.jsonp(lunch);
+    } else {
+      console.log(err);
+      return res.sendStatus(500);
+    }
+  });
+}
 
 router.put('/:date', function(req, res) {
   var targetDate = moment(req.params.date).format('YYYY-MM-DD');
@@ -102,29 +128,37 @@ router.post('/:date/ratings', function(req, res) {
   }
 
   var newRating = {
-    date: moment().format(),
+    date: targetDate,
+    dish: req.body.dish,
+    createDate: moment().format(),
     ip: req.ip,
     rating: parseInt(req.body.rating),
     type: 'UpDownVote',
     source: req.body.source
   }
 
-  if (newRating.source == null || newRating.source == "")
+  if (newRating.source == null || newRating.source == "") {
     newRating.source = "API";
+  }
 
-  req.db.get('lunches').findAndModify({ date: targetDate},
-    {$push: { ratings: newRating }},
-    function(err, result) {
-      if (err != null) {
-        console.log(err);
-        return res.sendStatus(500);
-      }
-      if (result == null) {
-        return res.sendStatus(404);
-      }
-      return res.sendStatus(204);
-  });
-
+  req.db.get('lunches').findOne({ date: targetDate}, {}, function(err, result) {
+    if (err != null) {
+      console.log(err);
+      return res.sendStatus(500);
+    }
+    if (result && buildDishes(result.menu).indexOf(newRating.dish) >= 0) {
+      req.db.get('ratings').insert(newRating, {}, function(err, result) {
+        if (err == null) {
+          return res.sendStatus(204);
+        } else {
+          console.log(err);
+          return res.sendStatus(500);
+        }
+      });
+    } else {
+      return res.sendStatus(404);
+    }
+  })
 });
 
 router.post('/:date/comments', function(req, res) {
@@ -135,28 +169,34 @@ router.post('/:date/comments', function(req, res) {
   }
 
   var newComment = {
-    date: moment().format(),
+    date: targetDate,
+    createDate: moment().format(),
     ip: req.ip,
+    name: req.body.name,
     message: req.body.message,
-    name: req.body.name
   }
 
-  if (newComment.name == null || newComment == "")
+  if (newComment.name == null || newComment == "") {
     newComment.name = "Anonymous";
+  }
 
-  req.db.get('lunches').findAndModify({ date: targetDate},
-    {$push: { comments: newComment }},
-    function(err, result) {
+  req.db.get('lunches').findOne({date: targetDate}, {}, function(err, result) {
+    if (err != null) {
+      console.log(err);
+      return res.sendStatus(500);
+    }
+    if (result == null) {
+      return res.sendStatus(404);
+    }
+    req.db.get('comments').insert(newComment, function(err, result) {
       if (err != null) {
         console.log(err);
         return res.sendStatus(500);
+      } else {
+        return res.sendStatus(204);
       }
-      if (result == null) {
-        return res.sendStatus(404);
-      }
-      return res.sendStatus(204);
+    });
   });
-
 });
 
 router.delete('/:date', function(req, res) {
@@ -192,7 +232,7 @@ function checkFeed(req, res) {
           // lunch parsing regexs shamelessly stolen from Cory's hubot script
           // https://git.kabbage.com/projects/HUB/repos/kbot/browse/scripts/lunch.coffee
           var ptag = item.summary.match(/<p(.*?)?>(.+)<\/p>/);
-          var tdtag =  item.summary.match(/<td(.*?)?>(.+)<\/td>/);
+          var tdtag = item.summary.match(/<td(.*?)?>(.+)<\/td>/);
 
           if (ptag)
             description = ptag[2];
@@ -272,6 +312,15 @@ function generate(req, res, next) {
         console.log(err);
         res.sendStatus(500);
       });
+}
+
+function buildDishes(menu) {
+  var rawDishes = menu.split(";");
+  var dishes = [];
+  for (var i = 0; i < rawDishes.length; i++) {
+    dishes.push(rawDishes[i].trim());
+  }
+  return dishes;
 }
 
 module.exports = router;

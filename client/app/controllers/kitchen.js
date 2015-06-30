@@ -2,32 +2,61 @@
 
 var controllers = angular.module('lunchControllers');
 
-controllers.controller('kitchenController', [ '$scope', 'lunchService',
-  function($scope, lunchService) {
+controllers.controller('kitchenController', [ '$scope', 'lunchService', '$interval',
+  function($scope, lunchService, $interval) {
 
     var ratingSource = "LunchTools.Kitchen";
 
     $scope.initialize = function() {
-      $scope.update();
+      $scope.votingOpen = false;
+      $scope.date = null;
+      $scope.kiosk = true;
+
+      $interval($scope.update, 1000);
     }
 
     $scope.update = function() {
-      $scope.error = null;
-      $scope.info = null;
-      $scope.lunch = null;
+      if ($scope.date != moment().format('YYYY-MM-DD')) {
+        $scope.error = null;
+        $scope.info = null;
+        $scope.lunch = null;
 
-      var date = moment('2016-01-01').format('YYYY-MM-DD'); // TODO: change to current day after debugging
+        $scope.date = moment().format('YYYY-MM-DD');
+        lunchService.get($scope.date).then(function(lunch) {$scope.lunch = lunch}, $scope.errorHandler);
+      }
 
-      lunchService.get(date).then(function(lunch) {$scope.lunch = lunch}, $scope.errorHandler);
+      var currentDate = new Date();
+      var hour = currentDate.getHours();
+
+      if ($scope.votingOpen == false && hour >= 12 && hour < 20) {
+        $scope.votingOpen = true;
+      }
+
+      if ($scope.votingOpen == true && (hour < 12 || hour >= 20) ) {
+        $scope.votingOpen = false;
+      }
     };
 
-    $scope.vote = function(rating) {
-      lunchService.rate($scope.lunch.date, rating, ratingSource)
-        .then(function() { $scope.info = "Vote Saved"}, $scope.errorHandler)
+    $scope.vote = function(dish, rating) {
+      lunchService.rate($scope.lunch.date, dish, rating, ratingSource)
+        .then(function() { $scope.info = null; $scope.error = null;}, $scope.errorHandler);
     };
 
     $scope.errorHandler = function(errorMessage) {
       $scope.error = errorMessage;
+    };
+
+    $scope.flash = function(element, color) {
+      /*
+      console.log(element);
+
+      element.setAttribute('disabled', true);
+
+      setTimeout(function(){
+          element.value = oldValue;
+          element.removeAttribute('disabled');
+      }, 3000)
+      */
     };
 
     $scope.initialize();

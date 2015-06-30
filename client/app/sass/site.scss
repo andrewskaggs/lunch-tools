@@ -11,7 +11,7 @@ h2 {
 
 .footer {
   text-align: center;
-  margin-top: 50px;
+  margin-top: 100px;
 }
 
 .footer img {
@@ -198,10 +198,6 @@ button.navbar-toggle {
   pointer-events: none;
 }
 
-#showme-controls-first {
-  margin-left: 0px;
-}
-
 .generate-row {
   align: center;
   text-align: center;
@@ -223,18 +219,20 @@ button.navbar-toggle {
 }
 
 .kitchen {
-  text-align: center;
   margin-top: 30px;
 }
 
-.kitchen-menu {
-  text-align: center;
-  font-size: 28px;
-  margin-top: 30px;
+.kitchen-row {
+  min-height: 200px;
 }
 
-.kitchen button:active {
-  color: red;
+.kitchen-dish {
+  text-align: left;
+  font-size: 24px;
+}
+
+.kitchen-button-fade {
+  transition: all 3s;
 }
 
 .toggle {

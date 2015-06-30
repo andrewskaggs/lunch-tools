@@ -9,6 +9,7 @@ services.service('lunchService', [ '$http', '$q',
         return $q(function(resolve, reject) {
           $http.get('lunches/' + date)
             .success( function(data, status, headers, config) {
+              data.dishes = buildDishes(data.menu);
               resolve(data);
             })
             .error( function(data, status, headers, config) {
@@ -23,6 +24,15 @@ services.service('lunchService', [ '$http', '$q',
             });
         });
       };
+
+      function buildDishes(menu) {
+        var rawDishes = menu.split(";");
+        var dishes = [];
+        for (var i = 0; i < rawDishes.length; i++) {
+          dishes.push(rawDishes[i].trim());
+        }
+        return dishes;
+      }
 
       this.getAll = function() {
         return $q(function(resolve, reject) {
@@ -94,10 +104,11 @@ services.service('lunchService', [ '$http', '$q',
         });
       };
 
-      this.rate = function(date, ratingNumber, source) {
+      this.rate = function(date, dish, ratingNumber, source) {
         return $q(function(resolve, errorHandler) {
           var url = 'lunches/' + date + '/ratings';
           var rating = {
+            dish: dish,
             rating: ratingNumber,
             source: source
           }
