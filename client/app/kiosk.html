@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lunch Tools</title>
+  <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.css">
+  <link rel="stylesheet" href="bower_components/pickadate/lib/themes/default.css">
+  <link rel="stylesheet" href="bower_components/pickadate/lib/themes/default.date.css">
+  <link rel="stylesheet" href="css/site.css">
+  <link rel="icon" type="image/png" href="img/hotdog32solid.png" />
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+
+<body ng-app="lunchApp">
+  <div class="container">
+    <ng-view></ng-view>
+  </div>
+</body>
+
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
+<script src="bower_components/moment/moment.js"></script>
+<script src="bower_components/underscore/underscore.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-touch/angular-touch.js"></script>
+<script src="bower_components/pickadate/lib/picker.js"></script>
+<script src="bower_components/pickadate/lib/picker.date.js"></script>
+<script src="bower_components/ng-pickadate/ng-pickadate.js"></script>
+<script src="kitchenapp.js"></script>
+<script src="controllers/generate.js"></script>
+<script src="controllers/kitchen.js"></script>
+<script src="controllers/menus.js"></script>
+<script src="controllers/showme.js"></script>
+<script src="controllers/statistics.js"></script>
+<script src="controllers/translations.js"></script>
+<script src="directives/switch.js"></script>
+<script src="directives/tab.js"></script>
+<script src="directives/spin.js"></script>
+<script src="services/lunch.js"></script>
+
+</html>
