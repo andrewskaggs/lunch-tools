@@ -146,26 +146,28 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
       return ratings;
     };
 
-    $scope.saveRating = function(date, rating) {
+    $scope.saveRating = function(dish, rating) {
+      var date = $scope.m.format(dateFormat);
       var newRating = {
         date: date,
+        dish: dish,
         rating: rating
       }
       if (!_.findWhere($scope.ratings, {date: date})) {
         $scope.lunch.rated = true;
         $scope.ratings.push(newRating);
         localStorage.ratings = JSON.stringify($scope.ratings);
-        $scope.checkRating();
       }
     };
 
-    $scope.checkRating = function() {
+    $scope.checkRating = function(dish) {
       var date = $scope.m.format(dateFormat);
-      var savedRating = _.findWhere($scope.ratings, {date: date} );
-      if (savedRating != null) {
-        $scope.currentRating = savedRating.rating;
-      }
-    }
+      var savedRating = _.findWhere($scope.ratings, {date: date, dish: dish} );
+      if (savedRating != null)
+        return savedRating.rating;
+      else
+        return 0;
+    };
 
     $scope.checkAdvanced = function() {
       var advancedParam = $location.search().advanced;
@@ -177,7 +179,7 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
         }
         $scope.saveSettings($scope.settings);
       }
-    }
+    };
 
     $scope.comment = function() {
       var date = $scope.m.format(dateFormat);
@@ -193,12 +195,12 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
         .catch($scope.errorHandler);
     };
 
-    $scope.vote = function(rating) {
+    $scope.vote = function(dish, rating) {
       var date = $scope.m.format(dateFormat);
-      lunchService.rate(date, rating, ratingSource)
-      .then(function() {
-        $scope.saveRating(date, rating);
-      }, $scope.errorHandler);
+      lunchService.rate($scope.lunch.date, dish, rating, ratingSource);
+//        .then(function() {
+//          $scope.saveRating(date, dish, rating);
+//        }, $scope.errorHandler);
     };
 
     $scope.$watch('settings.translate',

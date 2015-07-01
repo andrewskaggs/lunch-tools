@@ -1,8 +1,7 @@
 <div class="row showme">
-  <div>
     <h2>Show Me<span ng-if="settings.translate"> Redneck</span> Lunch</h2>
-  </div>
 </div>
+
 <!--
 <div class="row showme">
   <div style='position:relative;'>
@@ -50,7 +49,7 @@
   </div>
 </div>
 
-<!-- move me to top right-->
+<!-- move me to top right later -->
 <div class="row">
   <div class="showme-controls">
     <a class="btn btn-default" role="button" pick-a-date="pickerDate" pick-a-date-options="pickerOptions"><i class="fa fa-calendar fa-2x"></i></a>
@@ -58,25 +57,39 @@
   </div>
 </div>
 
-<!-- reactive me per dish
-<div class="row" ng-show="lunch">
+<div class="row" ng-show="lunch && settings.advanced">
   <div class="showme-comments col-xs-12 col-sm-8 col-sm-push-2 col-md-6 col-md-push-3">
-    <p ng-show="lunch">
-      <a class="btn btn-default" role="button" ng-click="vote(1)" ng-disabled="currentRating != null" ng-class="{ 'showme-comments-button-activeUp' : currentRating == 1 }"><i class="fa fa-thumbs-o-up fa-3x"></i></a>
-      <a class="btn btn-default" role="button" ng-click="vote(-1)" ng-disabled="currentRating != null" ng-class="{ 'showme-comments-button-activeDown' : currentRating == -1 }"><i class="fa fa-thumbs-o-down fa-3x"></i></a>
-    </p>
+    <div class="showme-comments-title">
+      Ratings
+    </div>
+    <div class="showme-comments">
+      <table class="table">
+        <tr ng-repeat="dish in lunch.dishes">
+          <td class="" style="width:100%">{{ dish }}</td>
+          <td class="pull-right" style="white-space: nowrap">
+            <a class="btn btn-default" role="button" ng-click="vote('{{dish}}',1);"><i class="fa fa-thumbs-o-up fa-2x"></i></a>
+            <a class="btn btn-default" role="button" ng-click="vote('{{dish}}',-1);"><i class="fa fa-thumbs-o-down fa-2x"></i></a>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>
--->
 
 <div class="row" ng-show="lunch">
   <div class="showme-comments col-xs-12 col-sm-8 col-sm-push-2 col-md-6 col-md-push-3">
     <div class="showme-comments-title">
       Comments
     </div>
-    <div ng-repeat="comment in lunch.comments | orderBy : 'date'">
-      <div class="showme-comment-body">{{comment.message}}</div>
-      <div class="showme-comment-meta">{{comment.name}} - {{comment.date | date: 'MMM d, y hh:mm:ss a'}}</div>
+    <div class="showme-comments">
+      <table class="table">
+        <tr ng-repeat="comment in lunch.comments | orderBy : 'date'">
+          <td>
+            <div class="showme-comment-body">{{comment.message}}</div>
+            <div class="showme-comment-meta">{{comment.name}} - {{comment.date | date: 'MMM d, y hh:mm:ss a'}}</div>
+          </td>
+        </tr>
+      </table>
     </div>
     <div class="showme-comments-form">
       <div>

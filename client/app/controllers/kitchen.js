@@ -28,11 +28,11 @@ controllers.controller('kitchenController', [ '$scope', 'lunchService', '$interv
       var currentDate = new Date();
       var hour = currentDate.getHours();
 
-      if ($scope.votingOpen == false && hour >= 12 && hour < 20) {
+      if ($scope.votingOpen == false && hour >= 12 && hour < 16) {
         $scope.votingOpen = true;
       }
 
-      if ($scope.votingOpen == true && (hour < 12 || hour >= 20) ) {
+      if ($scope.votingOpen == true && (hour < 12 || hour >= 16) ) {
         $scope.votingOpen = false;
       }
     };
@@ -44,19 +44,6 @@ controllers.controller('kitchenController', [ '$scope', 'lunchService', '$interv
 
     $scope.errorHandler = function(errorMessage) {
       $scope.error = errorMessage;
-    };
-
-    $scope.flash = function(element, color) {
-      /*
-      console.log(element);
-
-      element.setAttribute('disabled', true);
-
-      setTimeout(function(){
-          element.value = oldValue;
-          element.removeAttribute('disabled');
-      }, 3000)
-      */
     };
 
     $scope.initialize();

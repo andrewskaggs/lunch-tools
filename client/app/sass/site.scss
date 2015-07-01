@@ -11,7 +11,7 @@ h2 {
 
 .footer {
   text-align: center;
-  margin-top: 100px;
+  margin-top: 75px;
 }
 
 .footer img {
@@ -183,10 +183,10 @@ button.navbar-toggle {
 
 .showme-controls a {
   @media screen and (max-width: $screen-xs-max) {
-    margin-left: 8px;
+    margin-left: 5px;
   }
   @media screen and (min-width: $screen-sm-min) {
-    margin-left: 25px;
+    margin-left: 15px;
   }
 }
 
@@ -196,6 +196,10 @@ button.navbar-toggle {
 
 .showme-controls i {
   pointer-events: none;
+}
+
+#showme-controls-first {
+  margin-left: 0px;
 }
 
 .generate-row {
@@ -232,7 +236,7 @@ button.navbar-toggle {
 }
 
 .kitchen-button-fade {
-  transition: all 3s;
+  transition: color 3s;
 }
 
 .toggle {
