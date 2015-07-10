@@ -26,12 +26,25 @@ services.service('lunchService', [ '$http', '$q',
       };
 
       function buildDishes(menu) {
+        menu = cleanMenu(menu);
         var rawDishes = menu.split(";");
         var dishes = [];
         for (var i = 0; i < rawDishes.length; i++) {
           dishes.push(rawDishes[i].trim());
         }
         return dishes;
+      }
+
+      // HACK: The app needs to be refactored and this should be done serverside only with libraries instead of this trash
+      function cleanMenu(menu) {
+        var noHtmlMenu = menu.replace(/<(?:.|\n)*?>/gm, '');
+        var decodedMenu = noHtmlMenu;
+        var decodedMenu = decodedMenu.replace('&amp;', '&');
+        var decodedMenu = decodedMenu.replace('&lt;', '<');
+        var decodedMenu = decodedMenu.replace('&gt;', '>');
+        var decodedMenu = decodedMenu.replace('&quot;', '"');
+        var decodedMenu = decodedMenu.replace('&#39;', "'");
+        return decodedMenu;
       }
 
       this.getAll = function() {
@@ -64,8 +77,7 @@ services.service('lunchService', [ '$http', '$q',
 
       this.getMenuImageUrl = function(menu, safeSearch) {
         return $q(function(resolve, errorHandler) {
-
-          var firstMenuItem = menu.split(';')[0];
+          var firstMenuItem = buildDishes(menu)[0];
           var safeSearchValue = safeSearch == true ? 'active' : 'off';
 
           $http.jsonp('http://ajax.googleapis.com/ajax/services/search/images', {

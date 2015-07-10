@@ -315,12 +315,25 @@ function generate(req, res, next) {
 }
 
 function buildDishes(menu) {
+  menu = cleanMenu(menu);
   var rawDishes = menu.split(";");
   var dishes = [];
   for (var i = 0; i < rawDishes.length; i++) {
     dishes.push(rawDishes[i].trim());
   }
   return dishes;
+}
+
+// HACK: This needs to be refactored and done with libraries instead of this trash
+function cleanMenu(menu) {
+  var noHtmlMenu = menu.replace(/<(?:.|\n)*?>/gm, '');
+  var decodedMenu = noHtmlMenu;
+  var decodedMenu = decodedMenu.replace('&amp;', '&');
+  var decodedMenu = decodedMenu.replace('&lt;', '<');
+  var decodedMenu = decodedMenu.replace('&gt;', '>');
+  var decodedMenu = decodedMenu.replace('&quot;', '"');
+  var decodedMenu = decodedMenu.replace('&#39;', "'");
+  return decodedMenu;
 }
 
 module.exports = router;
