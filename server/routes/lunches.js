@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var parser = require('rssparser');
 var moment = require('moment');
-var Markov = require('blather');
+var MarkovChain = require('markovchain-generate');
+var _ = require('underscore');
 
 router.get('/', function(req, res) {
   req.db.get('lunches').find({},
@@ -275,16 +276,17 @@ function refreshMarkovChain(req, res, next) {
         res.status(500).send(err);
       })
       .on('success', function(dbchain) {
-        var chain = new Markov();
+        var chain = new MarkovChain();
         req.db.get('lunches').find({})
           .success(function(lunches) {
+            var menus = [];
             lunches.forEach(function(lunch) {
-              var sanitizedLunch = lunch.menu.replace(new RegExp("[\.\$]"), '');
-              chain.addText(sanitizedLunch);
+              menus.push(_.unescape(lunch.menu.replace(new RegExp("[\.\$]"), '').replace(/(<([^>]+)>)/ig, '')));
             });
+            chain.generateChain(menus.join(". "));
             req.db.get('lunch_markov_chains').findAndModify(
               { key: 'primary_chain'},
-              { $set: { key: 'primary_chain', dictionary: chain.dictionary }},
+              { $set: { key: 'primary_chain', dictionary: chain.dump() }},
               { upsert: true},
               function(err, result) {
                 if (err) {
@@ -303,9 +305,9 @@ function refreshMarkovChain(req, res, next) {
 function generate(req, res, next) {
   getMarkovChain(req.db)
       .on('success', function(dbchain) {
-        var chain = new Markov();
-        chain.dictionary = dbchain.dictionary;
-        var generatedMenu = chain.sentence();
+        var chain = new MarkovChain();
+        chain.load(dbchain.dictionary);
+        var generatedMenu = chain.generateString();
         res.jsonp({ menu: generatedMenu});
       })
       .on('error', function(err) {
