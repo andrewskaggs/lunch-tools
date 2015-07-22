@@ -323,6 +323,7 @@ function buildDishes(menu) {
   for (var i = 0; i < rawDishes.length; i++) {
     dishes.push(rawDishes[i].trim());
   }
+  dishes.push("Salad Bar");
   return dishes;
 }
 
@@ -330,11 +331,11 @@ function buildDishes(menu) {
 function cleanMenu(menu) {
   var noHtmlMenu = menu.replace(/<(?:.|\n)*?>/gm, '');
   var decodedMenu = noHtmlMenu;
-  var decodedMenu = decodedMenu.replace('&amp;', '&');
-  var decodedMenu = decodedMenu.replace('&lt;', '<');
-  var decodedMenu = decodedMenu.replace('&gt;', '>');
-  var decodedMenu = decodedMenu.replace('&quot;', '"');
-  var decodedMenu = decodedMenu.replace('&#39;', "'");
+  var decodedMenu = decodedMenu.replace(/&amp;/g, '&');
+  var decodedMenu = decodedMenu.replace(/&lt;/g, '<');
+  var decodedMenu = decodedMenu.replace(/&gt;/g, '>');
+  var decodedMenu = decodedMenu.replace(/&quot;/g, '"');
+  var decodedMenu = decodedMenu.replace(/&#39;/g, "'");
   return decodedMenu;
 }
 
