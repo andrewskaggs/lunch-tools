@@ -25,11 +25,16 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="showme">
+    <p ng-bind-html="lunch.menu" ng-show="!settings.translate"></p>
+    <p ng-bind-html="lunch.translation" ng-show="settings.translate"></p>
+  </div>
+</div>
+
 <div class="row" ng-swipe-left="nextDay()" ng-swipe-right="previousDay()">
   <div class="col-xs-12 col-sm-8 col-sm-push-2" >
     <div class="showme">
-      <p ng-bind-html="lunch.menu" ng-show="!settings.translate"></p>
-      <p ng-bind-html="lunch.translation" ng-show="settings.translate"></p>
       <div ng-if="lunch.image">
         <img ng-src="{{ lunch.image }}" class="img-responsive"><br/>
       </div>
