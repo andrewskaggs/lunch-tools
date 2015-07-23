@@ -88,10 +88,10 @@
     </div>
     <div class="showme-comments">
       <table class="table">
-        <tr ng-repeat="comment in lunch.comments | orderBy : 'date'">
+        <tr ng-repeat="comment in lunch.comments | orderBy : 'createDate'">
           <td>
             <div class="showme-comment-body">{{comment.message}}</div>
-            <div class="showme-comment-meta">{{comment.name}} - {{comment.date | date: 'MMM d, y hh:mm:ss a'}}</div>
+            <div class="showme-comment-meta">{{comment.name}} - {{comment.createDate | date: 'MMM d, y hh:mm:ss a'}}</div>
           </td>
         </tr>
       </table>
