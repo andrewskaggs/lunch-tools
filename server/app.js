@@ -1,12 +1,16 @@
-#!/usr/bin/env node
-var debug = require('debug')('LunchTools');
-var nunjucks = require('nunjucks');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var nunjucks = require('nunjucks');
+
+var lunchRoutes = require('./routes/lunches');
+var translationRoutes = require('./routes/translations');
+var translateRoutes = require('./routes/translate');
+
+var app = express();
 
 // mongo initialization
 var mongo = require('mongodb');
@@ -16,74 +20,57 @@ if (process.env.LUNCH_TOOLS_MONGO) {
     mongoConnectionString = process.env.LUNCH_TOOLS_MONGO;
 }
 var db = monk(mongoConnectionString);
-
-var app = express();
+app.use(function(req,res,next){req.db = db;next();});
 
 // view engine setup
+app.set('view engine', 'html');
 nunjucks.configure('views', {
     autoescape: true,
     express: app
 });
 
+// uncomment after placing your favicon in /public
+//app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(function(req,res,next){req.db = db;next();});
+app.use(express.static(path.join(__dirname, 'public')));
 
-// routing setup  - iisnode feeds in the whole path instead of
-// the application directory relative path so windows deployments
-// need to set the LUNCH_TOOLS_BASE_PATH environment variable
-var routeBase = '/';
-if (process.env.LUNCH_TOOLS_BASE_PATH) {
-	routeBase = process.env.LUNCH_TOOLS_BASE_PATH;
-}
-
-// route static files
-app.use(routeBase, express.static(path.join(__dirname, 'public')));
-app.use(routeBase, express.static(path.join(__dirname, 'client')));
-
-//include the controllers and route them
-var lunchRoutes = require('./routes/lunches');
-var translationRoutes = require('./routes/translations');
-var translateRoutes = require('./routes/translate');
-app.use(routeBase + 'lunches', lunchRoutes);
-app.use(routeBase + 'translations', translationRoutes);
-app.use(routeBase + 'translate', translateRoutes);
+app.use('/api/v1/lunches', lunchRoutes);
+app.use('/api/v1/translations', translationRoutes);
+app.use('/api/v1/translate', translateRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 // error handlers
 
-// development error handler includes stack trace
+// development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error.html', {
-            message: err.message,
-            error: err
-        });
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err
     });
+  });
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error.html', {
-        message: err.message,
-        error: {}
-    });
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
 });
 
-// finally start it up
-app.set('port', process.env.PORT || 3000);
-var server = app.listen(app.get('port'), function() {
-  debug('Express server listening on port ' + server.address().port);
-});
+
+module.exports = app;

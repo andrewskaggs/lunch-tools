@@ -13,32 +13,30 @@ MEAN stack application that stores lunch menus, performs translations, keeps sta
 
 ### API
 Restful API provided by an [Express](http://expressjs.com/) application. Endpoints:
-* `/translations`
+* `/api/v2/translations`
   * `GET` - all translations
   * `POST` (target, replacement) - new translation
-* `/translations/{id}`
+* `/api/v2/translations/{id}`
   * `GET`
-  * `PUT` (target, replacement) - update exisitng translation
+  * `PUT` (target, replacement) - update existing translation
   * `DELETE`
-* `/translate`
+* `/api/v2/translate`
   * `POST` (lunch)
-* `/lunches`
+* `/api/v2/lunches`
   * `GET` - All lunches (date and menu fields only)
   * `POST` (date, menu) - new lunch
-* `/lunches/{YYYY-MM-DD}`
+* `/api/v2/lunches/YYYY-MM-DD`
   * `GET` - Lunch details including ratings and comments
   * `PUT` (menu) - update existing lunch
   * `DELETE`
-* `/lunches/{YYYY-MM-DD}/ratings`
+* `/api/v2/lunches/YYYY-MM-DD/ratings`
   * `POST` (rating) - add an Up Vote/Down Vote style rating (-1 or 1)
-* `/lunches/{YYYY-MM-DD}/comments`
+* `/api/v2/lunches/YYYY-MM-DD/comments`
   * `POST` (name, message) - add a comment. name is optional
-* `/lunches/update`
-  * `GET` - Updates database with new lunches from a RSS feed. Set the URL by changing the server environment variable `LUNCH_TOOLS_RSS`. The lunch date is set by the publication date and the lunch contents is found by looking for a `<p>` tag. All new lunches are returned.
-* `/lunches/generate`
+* `/api/v2/lunches/generate`
   * `GET` - returns a randomly generated lunch menu
 
-All `GET` endpoints support JSONP when using the query string param `callback`
+All `GET` endpoints support JSONP when using the query string param `callback`.
 
 ## Development
 
@@ -61,13 +59,13 @@ mongoimport --db LunchTools --collection lunches --file data/lunches.json
 mongoimport --db LunchTools --collection translations --file data/translations.json
 ```
 
-### Local development with browser-sync and nodemon
+### Local development with browser-sync
 This is easiest with two terminals.
 
 ```
 cd server
 npm install
-npm run dev
+npm start
 ```
 
 ```
