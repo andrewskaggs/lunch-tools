@@ -215,6 +215,7 @@ router.delete('/:date', function(req, res) {
     });
 });
 
+/*
 function checkFeed(req, res) {
   if (process.env.LUNCH_TOOLS_RSS) {
     var rssAddress = process.env.LUNCH_TOOLS_RSS;
@@ -264,6 +265,7 @@ function checkFeed(req, res) {
     return res.sendStatus(500);
   }
 }
+*/
 
 function getMarkovChain(db) {
   var chains = db.get('lunch_markov_chains');
