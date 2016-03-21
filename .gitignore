@@ -31,7 +31,6 @@ node_modules
 mongo
 
 #build outputs
-client/build
+client/dist
 client/bower_components
-server/client
-server/iisnode
+server/public

@@ -7,7 +7,7 @@ services.service('lunchService', [ '$http', '$q',
 
       this.get = function(date) {
         return $q(function(resolve, reject) {
-          $http.get('lunches/' + date)
+          $http.get('api/v2/lunches/' + date)
             .success( function(data, status, headers, config) {
               data.dishes = buildDishes(data.menu);
               resolve(data);
@@ -50,7 +50,7 @@ services.service('lunchService', [ '$http', '$q',
 
       this.getAll = function() {
         return $q(function(resolve, reject) {
-          $http.get('lunches')
+          $http.get('api/v2/lunches')
             .success( function(data, status, headers, config) {
               resolve(data);
             })
@@ -64,7 +64,7 @@ services.service('lunchService', [ '$http', '$q',
 
       this.getGenerated = function() {
         return $q(function(resolve, errorHandler) {
-          $http.get('lunches/generate')
+          $http.get('api/v2/lunches/generate')
             .success( function(data, status, headers, config) {
               resolve(data.menu);
             })
@@ -105,7 +105,7 @@ services.service('lunchService', [ '$http', '$q',
 
       this.translateMenu = function(menu) {
         return $q(function(resolve, errorHandler) {
-          $http.post('translate', {lunch: menu}).
+          $http.post('api/v2/translate', {lunch: menu}).
             success(function(data, status, headers, config) {
               resolve(data.result);
             }).
@@ -119,7 +119,7 @@ services.service('lunchService', [ '$http', '$q',
 
       this.rate = function(date, dish, ratingNumber, source) {
         return $q(function(resolve, errorHandler) {
-          var url = 'lunches/' + date + '/ratings';
+          var url = 'api/v2/lunches/' + date + '/ratings';
           var rating = {
             dish: dish,
             rating: ratingNumber,
@@ -143,7 +143,7 @@ services.service('lunchService', [ '$http', '$q',
 
       this.comment = function(date, name, message) {
         return $q(function(resolve, errorHandler) {
-          var url = 'lunches/' + date + '/comments';
+          var url = 'api/v2/lunches/' + date + '/comments';
           var comment = {
             name: name,
             message: message
@@ -166,7 +166,7 @@ services.service('lunchService', [ '$http', '$q',
 
       this.update = function() {
         return $q(function(resolve, reject) {
-          $http.get('lunches/update')
+          $http.get('api/v2/lunches/update')
             .success( function(data, status, headers, config) {
               resolve(data);
             })

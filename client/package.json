@@ -1,6 +1,13 @@
 {
   "name": "lunch-tools-client",
   "version": "0.0.0",
+  "private": true,
+  "description": "MEAN app to manage lunch menus and translations",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/andrewskaggs/lunch-tools"
+  },
+  "license": "MIT",  
   "scripts": {
     "test": "echo wut"
   },

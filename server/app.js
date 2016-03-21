@@ -6,10 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var nunjucks = require('nunjucks');
 
-var lunchRoutes = require('./routes/lunches');
-var translationRoutes = require('./routes/translations');
-var translateRoutes = require('./routes/translate');
-
 var app = express();
 
 // mongo initialization
@@ -37,9 +33,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/v1/lunches', lunchRoutes);
-app.use('/api/v1/translations', translationRoutes);
-app.use('/api/v1/translate', translateRoutes);
+// API routes
+var lunchRoutes = require('./routes/lunches');
+var translationRoutes = require('./routes/translations');
+var translateRoutes = require('./routes/translate');
+app.use('/api/v2/lunches', lunchRoutes);
+app.use('/api/v2/translations', translationRoutes);
+app.use('/api/v2/translate', translateRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

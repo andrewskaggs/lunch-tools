@@ -7,7 +7,7 @@ var gulp = require('gulp'),
 var paths = {
     app: 'app/**',
     build: 'build/',
-    dist: '../server/client/',
+    dist: '../server/public/',
     bower: 'bower_components/',
     sass: 'app/sass/',
     css: 'css',
