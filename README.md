@@ -1,6 +1,6 @@
 # lunch-tools
 
-MEAN stack application that stores lunch menus, performs translations, keeps statistics, and more. Born from the loving nicknames we give our daily catered lunches at [Kabbage](https://www.kabbage.com/) and a desire to learn a new application stack.
+MEAN stack application that stores lunch menus, performs translations, tracks ratings, and more. Born from the loving nicknames we give our daily catered lunches at [Kabbage](https://www.kabbage.com/) and a desire to learn a new application stack.
 
 [![Build Status](https://travis-ci.org/andrewskaggs/lunch-tools.svg?branch=master)](https://travis-ci.org/andrewskaggs/lunch-tools)
 [![Code Climate](https://codeclimate.com/github/andrewskaggs/lunch-tools/badges/gpa.svg)](https://codeclimate.com/github/andrewskaggs/lunch-tools)
@@ -9,19 +9,10 @@ MEAN stack application that stores lunch menus, performs translations, keeps sta
 ## Using It
 
 ### Web App
-[AngularJS](https://angularjs.org/) app built using [Gulp](http://gulpjs.com/). Includes cool pages like "Show Me Lunch" in addition to demonstrating API functionality.
+[AngularJS](https://angularjs.org/) app built using [Gulp](http://gulpjs.com/). Demonstrates API functionality using fun pages like "Show Me Lunch."
 
 ### API
 Restful API provided by an [Express](http://expressjs.com/) application. Endpoints:
-* `/api/v2/translations`
-  * `GET` - all translations
-  * `POST` (target, replacement) - new translation
-* `/api/v2/translations/{id}`
-  * `GET`
-  * `PUT` (target, replacement) - update existing translation
-  * `DELETE`
-* `/api/v2/translate`
-  * `POST` (lunch)
 * `/api/v2/lunches`
   * `GET` - All lunches (date and menu fields only)
   * `POST` (date, menu) - new lunch
@@ -34,7 +25,16 @@ Restful API provided by an [Express](http://expressjs.com/) application. Endpoin
 * `/api/v2/lunches/YYYY-MM-DD/comments`
   * `POST` (name, message) - add a comment. name is optional
 * `/api/v2/lunches/generate`
-  * `GET` - returns a randomly generated lunch menu
+  * `GET` - returns a randomly generated lunch menu  
+* `/api/v2/translations`
+  * `GET` - all translations
+  * `POST` (target, replacement) - new translation
+* `/api/v2/translations/{id}`
+  * `GET`
+  * `PUT` (target, replacement) - update existing translation
+  * `DELETE`
+* `/api/v2/translate`
+  * `POST` (lunch)
 
 All `GET` endpoints support JSONP when using the query string param `callback`.
 
@@ -86,10 +86,3 @@ cd ..\server
 npm install
 ```
 Now run the server directory in the node host of your choice.
-
-### Windows Deployment
-This is is a pain but possible using [IISNODE](https://github.com/tjanczuk/iisnode). Be aware of the following issues:
-* A working _web.config_ file is included
-* Prefer setting your environment variables in the web.config file instead of through Windows. IIS only reads the Windows environment variables once per boot even if you restart it
-* Hosting in an application directory instead of the root requires `LUNCH_TOOLS_BASE_PATH` environment variable be set with the application directory (ie hosting at http://localhost/lunch/ would need a value of "/lunch/").
-* Some of the node packages used depend on the _node-gyp_ package. On Windows this requires Python 2.7.x and Visual Studio 2010 to be installed in order to build correctly.
