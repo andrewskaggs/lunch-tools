@@ -14,8 +14,11 @@ var paths = {
     bootstrap: 'bower_components/bootstrap-sass/assets/stylesheets'
 };
 
+// main two targets are kind of fucked since gulp can not do sequences yet
+// bower will finish after sass starts and break shit
+// workaround is to run a bower first then run stuff again
+// better solution is drop bower for npm and rewrite gulpfile so streams are OK
 gulp.task('default', ['clean', 'bower', 'sass', 'deploy', 'browser-sync', 'watch']);
-
 gulp.task('compile', ['clean', 'bower', 'sass', 'deploy']);
 
 gulp.task('bower', function() { 
