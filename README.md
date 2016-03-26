@@ -76,13 +76,6 @@ gulp
 
 ## Deployment
 
-### App Install
+The app is now configured for deployment with Docker. The Node server serves both API and client with supervisor configured to monitor it.
 
-```
-cd client
-npm install
-gulp deploy
-cd ..\server
-npm install
-```
-Now run the server directory in the node host of your choice.
+Docker-Compose file also provided with port 80 and Mongo environment variable passthroughs configured.
