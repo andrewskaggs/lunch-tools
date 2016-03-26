@@ -16,6 +16,8 @@ var paths = {
 
 gulp.task('default', ['clean', 'bower', 'sass', 'deploy', 'browser-sync', 'watch']);
 
+gulp.task('compile', ['clean', 'bower', 'sass', 'deploy']);
+
 gulp.task('bower', function() { 
     return bower().pipe(gulp.dest(paths.dist + paths.bower)) ;
 });
