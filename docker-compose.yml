@@ -4,3 +4,4 @@ web:
     - "80:3000"
   environment:
     - LUNCH_TOOLS_MONGO
+    - LUNCH_TOOLS_BING_API_KEY

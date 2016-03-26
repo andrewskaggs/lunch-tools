@@ -6,7 +6,6 @@ var gulp = require('gulp'),
 
 var paths = {
     app: 'app/**',
-    build: 'build/',
     dist: '../server/public/',
     bower: 'bower_components/',
     sass: 'app/sass/',
@@ -26,7 +25,7 @@ gulp.task('bower', function() { 
 });
 
 gulp.task('clean', function() {
-    del.sync([paths.build, paths.dist], { force: true });
+    del.sync([paths.dist], { force: true });
 });
 
 gulp.task('deploy', function() {

@@ -42,6 +42,10 @@ All `GET` endpoints support JSONP when using the query string param `callback`.
 
 Pull requests for bug fixes or new functionality welcome! Follow these instructions to get up and running.
 
+### Image Search Setup
+
+Lunch Tools now uses the [Bing Search API](https://datamarket.azure.com/dataset/5BA839F1-12CE-4CCE-BF57-A49D98D29A44) to provide image results. Sign up for a free account (5k queries per month) and put you key in the environment variable `LUNCH_TOOLS_BING_API_KEY`. This was formerly provided by the free Goolge JSON API which has now been discontinued.
+
 ### Database Setup
 [MongoDB](https://www.mongodb.org/) connection that defaults to a local instance named "LunchTools" without a password. Start it like this:
 
@@ -65,7 +69,7 @@ This is easiest with two terminals.
 ```
 cd server
 npm install
-npm start
+npm run dev
 ```
 
 ```
@@ -78,4 +82,4 @@ gulp
 
 The app is now configured for deployment with Docker. The Node server serves both API and client with supervisor configured to monitor it.
 
-Docker-Compose file also provided with port 80 and Mongo environment variable passthroughs configured.
+Docker-Compose file also provided with port 80 exposed and LUNCH_TOOLS environment variables mapped.
