@@ -26,5 +26,8 @@
     "underscore": "~1.8.3",
     "pickadate": "~3.5.6",
     "ng-pickadate": "~0.2.0"
+  },
+  "resolutions": {
+    "angular": "~1.4.5"
   }
 }

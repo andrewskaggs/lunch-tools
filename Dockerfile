@@ -1,6 +1,6 @@
 FROM alpine:3.3
 
-RUN apk add --update g++ make nodejs supervisor
+RUN apk add --update git g++ make nodejs supervisor
 
 RUN mkdir -p /app/client /app/server
 
