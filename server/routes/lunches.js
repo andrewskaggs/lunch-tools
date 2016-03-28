@@ -108,6 +108,7 @@ function jsonPost(req, res) {
   req.db.get('lunches').insert(validLunches,
     function(err, result) {
       if (err == null) {
+        refreshMarkovChain(req.db);
         return res.sendStatus(204);
       } else {
         console.log(err);
@@ -141,6 +142,7 @@ function formPost(req, res) {
       req.db.get('lunches').insert(newLunch,
         function(err, result) {
           if (err == null) {
+            refreshMarkovChain(req.db);
             return res.sendStatus(204);
           } else {
             console.log(err);
@@ -148,10 +150,6 @@ function formPost(req, res) {
           }
         });
     });
-};
-
-function insertLunch(lunch) {
-
 };
 
 router.post('/:date/ratings', function(req, res) {
@@ -253,21 +251,21 @@ function getMarkovChain(db) {
   return chains.findOne({key: 'primary_chain'});
 }
 
-function refreshMarkovChain(req, res, next) {
-  getMarkovChain(req.db)
+function refreshMarkovChain(db, next) {
+  getMarkovChain(db)
       .on('error', function(err) {
-        res.status(500).send(err);
+        console.log(err);
       })
       .on('success', function(dbchain) {
         var chain = new MarkovChain();
-        req.db.get('lunches').find({})
+        db.get('lunches').find({})
           .success(function(lunches) {
             var menus = [];
             lunches.forEach(function(lunch) {
               menus.push(_.unescape(lunch.menu.replace(new RegExp("[\.\$]"), '').replace(/(<([^>]+)>)/ig, '')));
             });
             chain.generateChain(menus.join(". "));
-            req.db.get('lunch_markov_chains').findAndModify(
+            db.get('lunch_markov_chains').findAndModify(
               { key: 'primary_chain'},
               { $set: { key: 'primary_chain', dictionary: chain.dump() }},
               { upsert: true},
@@ -275,7 +273,7 @@ function refreshMarkovChain(req, res, next) {
                 if (err) {
                   console.log(err);
                 } else {
-                  console.log(result);
+                  //console.log(result);
                   if (next)
                     return next;
                 }
