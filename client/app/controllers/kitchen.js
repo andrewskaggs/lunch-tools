@@ -13,7 +13,7 @@ controllers.controller('kitchenController', [ '$scope', 'lunchService', '$interv
       $scope.kiosk = true;
 
       $interval($scope.update, 1000);
-    }
+    };
 
     $scope.update = function() {
       if ($scope.date != moment().format('YYYY-MM-DD')) {

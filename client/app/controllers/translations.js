@@ -11,11 +11,11 @@ controllers.controller('translationsController', [ '$scope', '$http', '$sanitize
       $scope.dialogError = null;
 
       $scope.refresh();
-    }
+    };
 
     $scope.edit = function(id) {
         if (id) {
-          $http.get('translations/' + id)
+          $http.get('api/v2/translations/' + id)
             .success(function(response) {
               $scope._id = response[0]._id;
               $scope.target = response[0].target;
@@ -35,7 +35,7 @@ controllers.controller('translationsController', [ '$scope', '$http', '$sanitize
 
     $scope.save = function() {
       var verb;
-      var url = 'translations';
+      var url = 'api/v2/translations';
 
       if ($scope._id) {
         verb = 'PUT';
@@ -61,7 +61,7 @@ controllers.controller('translationsController', [ '$scope', '$http', '$sanitize
     };
 
     $scope.delete = function(id) {
-      $http.delete('translations/' + id)
+      $http.delete('api/v2/translations/' + id)
         .success(function(data, status, headers, config) {
           $('#deleteModal').modal('hide');
           $scope.refresh();
@@ -72,7 +72,7 @@ controllers.controller('translationsController', [ '$scope', '$http', '$sanitize
     };
 
     $scope.refresh = function() {
-      $http.get('translations').success(
+      $http.get('api/v2/translations').success(
         function(data, status, headers, config) {
           $scope.translations = data;
         })

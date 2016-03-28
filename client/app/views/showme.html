@@ -2,18 +2,6 @@
     <h2>Show Me<span ng-if="settings.translate"> Redneck</span> Lunch</h2>
 </div>
 
-<!--
-<div class="row showme">
-  <div style='position:relative;'>
-    <h2>Show Me<span ng-if="settings.translate"> Redneck</span> Lunch</h2>
-    <div style='position:absolute;right:0;top:0'>
-      <a class="btn btn-default" id="showme-controls-first" role="button" pick-a-date="pickerDate" pick-a-date-options="pickerOptions"><i class="fa fa-calendar fa-2x"></i></a>
-      <a class="btn btn-default" role="button" data-toggle="modal" data-target="#settingsModal" ng-show="settings.advanced"><i class="fa fa-gear fa-2x"></i></a>
-    </div>
-  </div>
-</div>
--->
-
 <div class="row">
   <div class="text-info bg-info lunch-alert" ng-if="info"><i class="fa fa-info-circle fa-lg"></i>{{ info }}</div>
   <div class="text-danger bg-danger lunch-alert" ng-if="error"><i class="fa fa-warning fa-lg"></i>{{ error }}</div>
@@ -127,6 +115,7 @@
         <lunch-switch field="settings.safeSearch">Safe Search</lunch-switch><br/>
         <br/>
         <a role="button" class="btn btn-primary" href="#/translations" onclick="$('#settingsModal').modal('hide');"><i class="fa fa-pencil fa-fw"></i>Edit Translations</a>
+        <a role="button" class="btn btn-primary" href="#/editmenus" onclick="$('#settingsModal').modal('hide');"><i class="fa fa-pencil fa-fw"></i>Edit Menus</a>
       </div>
       <div class="modal-footer">
         <a role="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-check fa-fw"></i>OK</a>

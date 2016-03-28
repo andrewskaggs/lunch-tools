@@ -164,19 +164,5 @@ services.service('lunchService', [ '$http', '$q',
         });
       };
 
-      this.update = function() {
-        return $q(function(resolve, reject) {
-          $http.get('api/v2/lunches/update')
-            .success( function(data, status, headers, config) {
-              resolve(data);
-            })
-            .error( function(data, status, headers, config) {
-                console.log(status);
-                console.log(data);
-                reject('Error reading RSS feed');
-            });
-        });
-      };
-
   }
 ]);

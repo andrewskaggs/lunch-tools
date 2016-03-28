@@ -7,7 +7,7 @@ controllers.controller('statisticsController', [ '$scope',
 
     $scope.initialize = function() {
       $scope.message = "statistics coming soon";
-    }
+    };
 
     $scope.initialize();
   }

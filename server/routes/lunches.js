@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-//var parser = require('rssparser');
 var moment = require('moment');
 var MarkovChain = require('markovchain-generate');
 var _ = require('underscore');
@@ -87,6 +86,37 @@ router.put('/:date', function(req, res) {
 });
 
 router.post('/', function(req, res) {
+  if (req.is('json')) {
+    jsonPost(req,res);
+  } else {
+    formPost(req,res);
+  }
+});
+
+function jsonPost(req, res) {
+  var newLunches = _.map(req.body, function(x) {
+    return {
+      date: moment(x.date).format('YYYY-MM-DD'),
+      menu: x.menu
+    }
+  });
+
+  var validLunches = _.reject(newLunches, function(x) {
+    return x.menu == "";
+  });
+
+  req.db.get('lunches').insert(validLunches,
+    function(err, result) {
+      if (err == null) {
+        return res.sendStatus(204);
+      } else {
+        console.log(err);
+        return res.sendStatus(500);
+      }
+    });
+};
+
+function formPost(req, res) {
   if (!req.body.date) {
     return res.status(400).send( { message: 'date field is required' } );
   }
@@ -118,8 +148,11 @@ router.post('/', function(req, res) {
           }
         });
     });
+};
 
-});
+function insertLunch(lunch) {
+
+};
 
 router.post('/:date/ratings', function(req, res) {
   var targetDate = moment(req.params.date).format('YYYY-MM-DD');
@@ -214,58 +247,6 @@ router.delete('/:date', function(req, res) {
       return res.sendStatus(204);
     });
 });
-
-/*
-function checkFeed(req, res) {
-  if (process.env.LUNCH_TOOLS_RSS) {
-    var rssAddress = process.env.LUNCH_TOOLS_RSS;
-    var options = {};
-    parser.parseURL(rssAddress, options, function(err, out){
-      if (err) {
-        console.log(err);
-        res.status(500).send( { message: err } );
-      }
-      else {
-        var newLunches = [];
-        out.items.forEach(function(item){
-          var date = moment(item.published_at).format('YYYY-MM-DD');
-          var description = '';
-
-          // lunch parsing regexs shamelessly stolen from Cory's hubot script
-          // https://git.kabbage.com/projects/HUB/repos/kbot/browse/scripts/lunch.coffee
-          var ptag = item.summary.match(/<p(.*?)?>(.+)<\/p>/);
-          var tdtag = item.summary.match(/<td(.*?)?>(.+)<\/td>/);
-
-          if (ptag)
-            description = ptag[2];
-          else if (tdtag)
-            description = tdtag[2];
-
-          var lunch = {
-            date: date,
-            menu: description
-          };
-
-          req.db.get('lunches').find({ date: lunch.date },{}, function(err, result) {
-            if (result.length === 0) {
-              req.db.get('lunches').insert( lunch ,{});
-              newLunches.push(lunch);
-            }
-          });
-
-        });
-        if (newLunches.length > 0) {
-          refreshMarkovChain(req, res);
-        }
-        return res.jsonp(newLunches);
-      }
-    });
-  } else {
-    console.log('LUNCH_TOOLS_RSS variable not found');
-    return res.sendStatus(500);
-  }
-}
-*/
 
 function getMarkovChain(db) {
   var chains = db.get('lunch_markov_chains');
