@@ -12,19 +12,13 @@ controllers.controller('generateController', [ '$scope', 'lunchService',
     $scope.generate = function() {
       $scope.error = null;
       $scope.info = null;
-      $scope.menu = null;
-      $scope.image = null
+      $scope.lunch = null;
 
-      lunchService.getGenerated().then($scope.setMenu, $scope.errorHandler);
+      lunchService.getGenerated().then($scope.setLunch, $scope.errorHandler);
     };
 
-    $scope.setMenu = function(menu) {
-      $scope.menu = menu;
-      lunchService.getMenuImageUrl(menu, false).then($scope.setImage, $scope.errorHandler);
-    };
-
-    $scope.setImage = function(imageUrl) {
-      $scope.image = imageUrl;
+    $scope.setLunch = function(lunch) {
+      $scope.lunch = lunch;
     };
 
     $scope.errorHandler = function(errorMessage) {

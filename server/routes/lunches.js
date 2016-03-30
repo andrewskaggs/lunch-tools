@@ -52,16 +52,20 @@ function appendComments(req, res, lunch) {
 }
 
 function appendRatings(req, res, lunch) {
-  return res.jsonp(lunch);
   req.db.get('ratings').find({date: lunch.date}, function(err, result) {
     if (err == null) {
       lunch.ratings = result;
-      return res.jsonp(lunch);
+      appendImage(req, res, lunch);
     } else {
       console.log(err);
       return res.sendStatus(500);
     }
   });
+}
+
+function appendImage(req, res, lunch) {
+  lunch.image = 'http://cookdiary.net/wp-content/uploads/images/Tacos_5487.png';
+  return res.jsonp(lunch);
 }
 
 router.put('/:date', function(req, res) {
@@ -288,8 +292,8 @@ function generate(req, res, next) {
       .on('success', function(dbchain) {
         var chain = new MarkovChain();
         chain.load(dbchain.dictionary);
-        var generatedMenu = chain.generateString();
-        res.jsonp({ menu: generatedMenu});
+        var generatedLunch = { menu: chain.generateString() };
+        res.jsonp(generatedLunch);
       })
       .on('error', function(err) {
         console.log(err);

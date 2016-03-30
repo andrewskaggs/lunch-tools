@@ -60,20 +60,6 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
     $scope.setLunch = function(lunch) {
       $scope.lunch = lunch;
       $scope.checkRating();
-      if ($scope.settings.translate) {
-        lunchService.translateMenu($scope.lunch.menu).then(function(translation) {
-            $scope.lunch.translation = translation;
-            return lunchService.getMenuImageUrl($scope.lunch.translation);
-          })
-          .then($scope.setImage)
-          .catch($scope.errorHandler);
-      } else {
-        lunchService.getMenuImageUrl(lunch.menu).then($scope.setImage, $scope.errorHandler );
-      }
-    };
-
-    $scope.setImage = function(imageUrl) {
-      $scope.lunch.image = imageUrl;
     };
 
     $scope.errorHandler = function(errorMessage) {
