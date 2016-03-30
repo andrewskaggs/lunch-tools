@@ -12,7 +12,7 @@ MEAN stack application that stores lunch menus, performs translations, tracks ra
 [AngularJS](https://angularjs.org/) app built using [Gulp](http://gulpjs.com/). Demonstrates API functionality using fun pages like "Show Me Lunch."
 
 ### API
-Restful API provided by an [Express](http://expressjs.com/) application. Endpoints:
+Restful API is an [Express](http://expressjs.com/) application. Endpoints:
 * `/api/v2/lunches`
   * `GET` - Array containing basics of all lunches
   ```
@@ -24,7 +24,7 @@ Restful API provided by an [Express](http://expressjs.com/) application. Endpoin
       ...
   ]
   ```
-  * `POST` (date, menu) - new lunch
+  * `POST` (date, menu) - Create a new lunch. Accepts single lunch in url encoded form data or JSON array of lunches.
 * `/api/v2/lunches/YYYY-MM-DD`
   * `GET` - Full details about the specified lunch
   ```
@@ -122,6 +122,6 @@ gulp
 
 ## Deployment
 
-The app is now configured for deployment with Docker. The Node server serves both API and client with supervisor configured to monitor it.
+The app is now intended to be deployed as a Docker container. The Node.js server is listening on port 3000 serving both API and client app. Supervisor is configured to monitor it.
 
-Docker-Compose file also provided with port 80 exposed and LUNCH_TOOLS environment variables mapped.
+Docker-Compose file also provided for local development with port 80 and environment variables mapped.
