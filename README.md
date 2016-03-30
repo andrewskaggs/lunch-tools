@@ -14,11 +14,51 @@ MEAN stack application that stores lunch menus, performs translations, tracks ra
 ### API
 Restful API provided by an [Express](http://expressjs.com/) application. Endpoints:
 * `/api/v2/lunches`
-  * `GET` - All lunches (date and menu fields only)
+  * `GET` - Array containing basics of all lunches
+  ```
+  [
+      {
+        date: "2015-07-21",
+        menu: "Tacos; Rice; Churros"
+      },
+      ...
+  ]
+  ```
   * `POST` (date, menu) - new lunch
 * `/api/v2/lunches/YYYY-MM-DD`
-  * `GET` - Lunch details including ratings and comments
-  * `PUT` (menu) - update existing lunch
+  * `GET` - Full details about the specified lunch
+  ```
+  {
+      date: "2015-07-21",
+      menu: "Tacos; Rice; Churros",
+      image: "https://imgur.com/gallery/6sTMEWA",
+      ratings:
+      [
+        {
+          date: "2015-07-21"
+          name: "Andrew"
+          message: "The churros were so good that I ate 12!"
+          createDate: "2015-07-21T16:32:26+00:00"
+          ip: "127.0.0.1"
+        },
+        ...
+      ],
+      comments:
+      [
+        {
+          date: "2015-07-21"
+          dish: "Churros"
+          rating: 1
+          source: "LunchTools.Kitchen"
+          type: "UpDownVote"
+          createDate: "2015-07-21T16:01:08+00:00"
+          ip: "127.0.0.1"
+        },
+        ...
+      ]
+  }
+  ```
+  * `PUT` (menu field only) - update existing lunch
   * `DELETE`
 * `/api/v2/lunches/YYYY-MM-DD/ratings`
   * `POST` (rating) - add an Up Vote/Down Vote style rating (-1 or 1)
@@ -37,6 +77,8 @@ Restful API provided by an [Express](http://expressjs.com/) application. Endpoin
   * `POST` (lunch)
 
 All `GET` endpoints support JSONP when using the query string param `callback`.
+
+`POST` and `PUT` endpoints expect url-encoded forms unless otherwise noted.
 
 ## Development
 
