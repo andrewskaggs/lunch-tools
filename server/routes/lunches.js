@@ -3,6 +3,7 @@ var router = express.Router();
 var moment = require('moment');
 var MarkovChain = require('markovchain-generate');
 var _ = require('underscore');
+var https = require('https');
 
 router.get('/', function(req, res) {
   req.db.get('lunches').find({},
@@ -64,8 +65,41 @@ function appendRatings(req, res, lunch) {
 }
 
 function appendImage(req, res, lunch) {
-  lunch.image = 'http://cookdiary.net/wp-content/uploads/images/Tacos_5487.png';
-  return res.jsonp(lunch);
+  var resultCount = 10;
+  var query = lunch.menu;
+  var apiKey = 'apiKeyNotFound';
+  if (process.env.LUNCH_TOOLS_BING_API_KEY) {
+    apiKey = process.env.LUNCH_TOOLS_BING_API_KEY;
+  }
+  var authHeader = apiKey + ':' + apiKey;
+  var query = encodeURIComponent(lunch.menu.split(';')[0]);
+
+  var options = {
+    hostname: 'api.datamarket.azure.com',
+    path: '/Bing/Search/Image?Query=%27' + query + '%27&$top=10&$format=JSON',
+    method: 'GET',
+    auth: authHeader
+  }
+
+  https.request(options, (response) => {
+    var imageResponse = '';
+
+    response.on('data', (d) => {
+      imageResponse += d;
+    });
+
+    response.on('end', function () {
+      var result = JSON.parse(imageResponse);
+      console.log(result);
+      if (result.d.results && result.d.results.length > 0) {
+        var resultsCount = result.d.results.length;
+        var image = result.d.results[_.random(0, resultsCount-1)].MediaUrl;
+        lunch.image = image;
+      }
+      return res.jsonp(lunch);
+    });
+  }).end();
+
 }
 
 router.put('/:date', function(req, res) {
