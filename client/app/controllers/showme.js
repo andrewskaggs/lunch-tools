@@ -59,6 +59,8 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
 
     $scope.setLunch = function(lunch) {
       $scope.lunch = lunch;
+      if (lunch.image == '404')
+        $scope.notFound = true;
       $scope.checkRating();
     };
 

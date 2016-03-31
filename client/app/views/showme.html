@@ -23,7 +23,7 @@
 <div class="row" ng-swipe-left="nextDay()" ng-swipe-right="previousDay()">
   <div class="col-xs-12 col-sm-8 col-sm-push-2" >
     <div class="showme">
-      <div ng-if="lunch.image">
+      <div ng-if="!notFound && lunch.image">
         <img ng-src="{{ lunch.image }}" class="img-responsive"><br/>
       </div>
       <div ng-show="notFound">

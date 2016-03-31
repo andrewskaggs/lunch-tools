@@ -32,7 +32,6 @@ router.get('/:date', function(req, res) {
     { fields: {_id: 0, ratings: 0, comments: 0 }},
     function(err, result) {
       if (result) {
-        //return res.jsonp(result);
         appendComments(req,res,result);
       } else {
         return res.sendStatus(404);
@@ -56,7 +55,7 @@ function appendRatings(req, res, lunch) {
   req.db.get('ratings').find({date: lunch.date}, function(err, result) {
     if (err == null) {
       lunch.ratings = result;
-      appendImage(req, res, lunch);
+      verifyImage(req, res, lunch);
     } else {
       console.log(err);
       return res.sendStatus(500);
@@ -64,9 +63,19 @@ function appendRatings(req, res, lunch) {
   });
 }
 
+function verifyImage(req, res, lunch) {
+  if (lunch.images && lunch.images.length > 0) {
+    console.log(lunch.date + ' image cache hit');
+    formatLunch(req,res,lunch);
+  }
+  else {
+    console.log(lunch.date + ' image cache miss')
+    appendImage(req,res,lunch);
+  }
+}
+
 function appendImage(req, res, lunch) {
   var resultCount = 10;
-  var query = lunch.menu;
   var apiKey = 'apiKeyNotFound';
   if (process.env.LUNCH_TOOLS_BING_API_KEY) {
     apiKey = process.env.LUNCH_TOOLS_BING_API_KEY;
@@ -90,16 +99,45 @@ function appendImage(req, res, lunch) {
 
     response.on('end', function () {
       var result = JSON.parse(imageResponse);
-      console.log(result);
       if (result.d.results && result.d.results.length > 0) {
         var resultsCount = result.d.results.length;
-        var image = result.d.results[_.random(0, resultsCount-1)].MediaUrl;
-        lunch.image = image;
+        console.log("Bing Query: " + query + " Results: " + resultsCount);
+        lunch.images = _.map(result.d.results, function(x) { return x.MediaUrl });
+      } else {
+        console.log(result);
+        lunch.images = ['404'];
+        console.log(lunch);
       }
-      return res.jsonp(lunch);
+
+      req.db.get('lunches').update({date: lunch.date},
+        { $set: { images: lunch.images } },
+        function(err, result) {
+          if (err != null || result == 0) {
+            console.log(err);
+            return res.sendStatus(500);
+          }
+        });
+
+      formatLunch(req, res, lunch);
     });
   }).end();
 
+}
+
+function formatLunch(req, res, lunch) {
+  var newLunch = {
+    date: lunch.date,
+    menu: lunch.menu,
+    ratings: lunch.ratings,
+    comments: lunch.comments
+  };
+
+  if (lunch.images && lunch.images.length > 0)
+    newLunch.image = lunch.images[_.random(0, lunch.images.length-1)];
+  else
+    newLunch.image = '';
+
+  return res.jsonp(newLunch);
 }
 
 router.put('/:date', function(req, res) {
