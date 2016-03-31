@@ -113,7 +113,6 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
             advanced: false,
             translate: false,
             skipWeekends: true,
-            safeSearch: false
           };
       }
 
@@ -207,15 +206,6 @@ controllers.controller('showMeController', [ '$scope', '$cookies', '$routeParams
         if ($scope.settings.skipWeekends && (day == 0 || day == 6)) {
           $scope.nextDay();
         }
-      }
-    );
-
-    $scope.$watch('settings.safeSearch',
-      function(newValue, oldValue) {
-        if (newValue == oldValue)
-          return;
-        $scope.saveSettings($scope.settings);
-        $scope.update($scope.m.format(dateFormat));
       }
     );
 
