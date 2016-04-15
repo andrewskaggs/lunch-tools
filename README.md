@@ -61,7 +61,7 @@ Restful API is an [Express](http://expressjs.com/) application. Endpoints:
   * `PUT` (menu field only) - update existing lunch
   * `DELETE`
 * `/api/v2/lunches/YYYY-MM-DD/ratings`
-  * `POST` (rating) - add an Up Vote/Down Vote style rating (-1 or 1)
+  * `POST` (dish, rating, source) - Add an Up Vote/Down Vote style rating (1 or -1). Dish field must be one of the semicolon delimited items in the day's lunch. Source is an optional description of the app consuming the API.
 * `/api/v2/lunches/YYYY-MM-DD/comments`
   * `POST` (name, message) - add a comment. name is optional
 * `/api/v2/lunches/generate`

@@ -231,6 +231,10 @@ function formPost(req, res) {
 router.post('/:date/ratings', function(req, res) {
   var targetDate = moment(req.params.date).format('YYYY-MM-DD');
 
+  if (!req.body.dish) {
+    return res.status(400).send( { message: 'dish required' } );
+  }
+
   if (!req.body.rating || (parseInt(req.body.rating) != -1 && parseInt(req.body.rating)!= 1)) {
     return res.status(400).send( { message: 'rating must be either -1 or 1' } );
   }
